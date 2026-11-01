@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  HeartIcon,
-  MagnifyingGlassIcon,
+  HomeIcon,
+  Squares2X2Icon,
   PlusCircleIcon,
-  BookOpenIcon,
+  SparklesIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import React, { useEffect, useRef } from "react";
 import { PathName, Route } from "@/routers/types";
-import MenuBar from "@/shared/MenuBar";
 import isInViewport from "@/utils/isInViewport";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,21 +20,21 @@ if (typeof window !== "undefined") {
 
 interface NavItem {
   name: string;
-  link?: PathName | Route;
+  link: PathName | Route;
   icon: any;
   isSpecial?: boolean;
 }
 
 const NAV: NavItem[] = [
   {
-    name: "Keşfet",
-    link: "/",
-    icon: MagnifyingGlassIcon,
+    name: "Ana Sayfa",
+    link: "/" as Route,
+    icon: HomeIcon,
   },
   {
     name: "İlanlar",
     link: "/listing-stay" as Route,
-    icon: HeartIcon,
+    icon: Squares2X2Icon,
   },
   {
     name: "İlan Ver",
@@ -43,13 +43,14 @@ const NAV: NavItem[] = [
     isSpecial: true,
   },
   {
-    name: "Cinsler",
+    name: "48 Cins",
     link: "/listing-car" as Route,
-    icon: BookOpenIcon,
+    icon: SparklesIcon,
   },
   {
-    name: "Menü",
-    icon: MenuBar,
+    name: "İlanlarım",
+    link: "/ilanlarim" as Route,
+    icon: UserCircleIcon,
   },
 ];
 
@@ -61,6 +62,11 @@ const FooterNav = () => {
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", handleEvent);
     }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("scroll", handleEvent);
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -98,58 +104,47 @@ const FooterNav = () => {
   const renderItem = (item: NavItem, index: number) => {
     const isActive = pathname === item.link;
 
-    if (item.isSpecial && item.link) {
+    if (item.isSpecial) {
       return (
         <Link
           key={index}
           href={item.link as PathName}
-          className="flex flex-col items-center justify-center -mt-4"
+          className="flex flex-col items-center justify-center -mt-3.5"
         >
-          <div className="w-12 h-12 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/30">
-            <PlusCircleIcon className="w-7 h-7" />
+          <div className="w-10 h-10 rounded-full bg-[#dc5075] text-white flex items-center justify-center shadow-md shadow-[#dc5075]/40 ring-2 ring-white dark:ring-[#151312]">
+            <PlusCircleIcon className="w-6 h-6" />
           </div>
-          <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 mt-1">
+          <span className="text-[9px] font-bold text-[#dc5075] mt-0.5">
             {item.name}
           </span>
         </Link>
       );
     }
 
-    return item.link ? (
+    return (
       <Link
         key={index}
         href={item.link as PathName}
-        className={`flex flex-col items-center justify-between text-neutral-500 dark:text-neutral-300/90 ${
-          isActive ? "text-amber-500 dark:text-amber-400 font-medium" : ""
+        className={`flex flex-col items-center justify-between py-0.5 ${
+          isActive
+            ? "text-[#dc5075] font-bold"
+            : "text-neutral-500 dark:text-neutral-400"
         }`}
       >
-        <item.icon className={`w-5 h-5 ${isActive ? "text-amber-500 dark:text-amber-400" : ""}`} />
-        <span
-          className={`text-[10px] leading-none mt-1 ${
-            isActive ? "text-amber-500 dark:text-amber-400" : ""
-          }`}
-        >
-          {item.name}
-        </span>
+        <item.icon
+          className={`w-4 h-4 ${isActive ? "text-[#dc5075]" : ""}`}
+        />
+        <span className="text-[9px] leading-none mt-1">{item.name}</span>
       </Link>
-    ) : (
-      <div
-        key={index}
-        className="flex flex-col items-center justify-between text-neutral-500 dark:text-neutral-300/90"
-      >
-        <item.icon iconClassName="w-5 h-5" className="" />
-        <span className="text-[10px] leading-none mt-1">{item.name}</span>
-      </div>
     );
   };
 
   return (
     <div
       ref={containerRef}
-      className="FooterNav block md:!hidden py-1.5 px-3 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md fixed top-auto bottom-0 inset-x-0 z-30 border-t border-neutral-200 dark:border-neutral-800 
-      transition-transform duration-300 ease-in-out shadow-lg"
+      className="FooterNav block md:!hidden py-1.5 px-2 bg-[#FAF8F5]/95 dark:bg-[#151312]/95 backdrop-blur-md fixed top-auto bottom-0 inset-x-0 z-30 border-t border-[#EDE7DE] dark:border-neutral-800 transition-transform duration-300 ease-in-out shadow-lg"
     >
-      <div className="w-full max-w-lg flex justify-around items-center mx-auto text-sm text-center">
+      <div className="w-full max-w-md flex justify-around items-center mx-auto text-center">
         {NAV.map(renderItem)}
       </div>
     </div>

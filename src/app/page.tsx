@@ -94,44 +94,44 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#FAF8F5] dark:bg-[#151312] text-[#1C1917] dark:text-[#E8E4DF] transition-colors pb-12">
       {/* 1. ÜST ARAMA VE RENKLİ KATEGORİ ÇUBUĞU (KÖPEK DÜNYASI BİREBİR TASARIM) */}
-      <section className="bg-[#2D2A26] dark:bg-[#1a1716] border-b border-neutral-700 shadow-sm text-white sticky top-20 z-20">
-        <div className="max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-8 xl:px-10">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 py-1.5">
-            {/* SOL KATEGORİ SEKMELERİ */}
-            <div className="flex items-center overflow-x-auto no-scrollbar whitespace-nowrap text-xs font-bold tracking-tight">
+      <section className="bg-[#2D2A26] dark:bg-[#1a1716] border-b border-neutral-700 shadow-sm text-white sticky top-14 sm:top-20 z-20">
+        <div className="max-w-[1720px] mx-auto px-2 sm:px-6 lg:px-8 xl:px-10">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-1.5 sm:gap-2 py-1.5">
+            {/* SOL KATEGORİ SEKMELERİ (Mobilde 4 eşit sütun, masaüstünde yatay) */}
+            <div className="grid grid-cols-4 md:flex items-center whitespace-nowrap text-[10px] sm:text-xs font-bold tracking-tight rounded overflow-hidden">
               <Link
                 href={"/uyeler" as Route}
-                className="px-4 py-2.5 bg-[#802859] hover:bg-[#6b1e48] text-white flex items-center gap-1.5 transition-colors rounded-l-md"
+                className="px-1.5 sm:px-4 py-2 sm:py-2.5 bg-[#802859] hover:bg-[#6b1e48] text-white flex items-center justify-center gap-1 transition-colors"
               >
-                <span>Üyelerimiz</span>
+                <span className="truncate">Üyelerimiz</span>
               </Link>
               <Link
                 href={"/listing-stay?sort=newest" as Route}
-                className="px-4 py-2.5 bg-[#dc5075] hover:bg-[#c93f64] text-white flex items-center gap-1.5 transition-colors"
+                className="px-1.5 sm:px-4 py-2 sm:py-2.5 bg-[#dc5075] hover:bg-[#c93f64] text-white flex items-center justify-center gap-1 transition-colors"
               >
-                <span>Yeni İlanlar</span>
+                <span className="truncate">Yeni İlanlar</span>
               </Link>
               <Link
                 href={"/listing-car" as Route}
-                className="px-4 py-2.5 bg-[#d4990b] hover:bg-[#b88408] text-white flex items-center gap-1.5 transition-colors"
+                className="px-1.5 sm:px-4 py-2 sm:py-2.5 bg-[#d4990b] hover:bg-[#b88408] text-white flex items-center justify-center gap-1 transition-colors"
               >
-                <span>Popüler Cinsler</span>
+                <span className="truncate">Popüler Cinsler</span>
               </Link>
               <Link
                 href={"/listing-stay" as Route}
-                className="px-4 py-2.5 bg-[#3c4043] hover:bg-[#2e3134] text-white flex items-center gap-1.5 transition-colors rounded-r-md md:rounded-r-none"
+                className="px-1.5 sm:px-4 py-2 sm:py-2.5 bg-[#3c4043] hover:bg-[#2e3134] text-white flex items-center justify-center gap-1 transition-colors"
               >
-                <span>Tüm İlanlar</span>
+                <span className="truncate">Tüm İlanlar</span>
               </Link>
             </div>
 
             {/* SAĞ ARAMA FORMU: CİNS SEÇİMİ, ŞEHİR SEÇİMİ VE PEMBE ARA BUTONU */}
-            <div className="flex items-center gap-1.5 py-1 md:py-0 w-full md:w-auto">
+            <div className="flex items-center gap-1.5 py-0.5 md:py-0 w-full md:w-auto">
               {/* Cins/Tür Seçimi */}
               <select
                 value={selectedBreed}
                 onChange={(e) => setSelectedBreed(e.target.value)}
-                className="flex-1 md:w-44 text-xs font-medium text-neutral-800 bg-white border border-neutral-300 rounded px-2.5 py-2 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
+                className="flex-1 min-w-0 md:w-44 text-[11px] sm:text-xs font-medium text-neutral-800 bg-white border border-neutral-300 rounded px-2 py-1.5 sm:px-2.5 sm:py-2 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
               >
                 <option value="TÜMÜ">Cins/Tür Seçin</option>
                 {ALL_BREEDS.map((breed) => (
@@ -145,7 +145,7 @@ export default function HomePage() {
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
-                className="flex-1 md:w-36 text-xs font-medium text-neutral-800 bg-white border border-neutral-300 rounded px-2.5 py-2 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
+                className="flex-1 min-w-0 md:w-36 text-[11px] sm:text-xs font-medium text-neutral-800 bg-white border border-neutral-300 rounded px-2 py-1.5 sm:px-2.5 sm:py-2 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
               >
                 <option value="TÜMÜ">Şehir (Tümü)</option>
                 {CITIES_LIST.map((city) => (
@@ -159,9 +159,9 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => {}}
-                className="px-5 py-2 bg-[#dc5075] hover:bg-[#c93f64] text-white text-xs font-bold rounded flex items-center gap-1 shadow-sm transition-all"
+                className="px-3 sm:px-5 py-1.5 sm:py-2 bg-[#dc5075] hover:bg-[#c93f64] text-white text-[11px] sm:text-xs font-bold rounded flex items-center gap-1 shadow-sm transition-all shrink-0"
               >
-                <MagnifyingGlassIcon className="w-4 h-4" />
+                <MagnifyingGlassIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>ARA</span>
               </button>
             </div>
@@ -170,28 +170,28 @@ export default function HomePage() {
       </section>
 
       {/* 2. ANA GÖVDE: SOLDA CİNS LİSTESİ SIDEBAR, SAĞDA VİTRİN & LİSTELER */}
-      <div className="max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-8 xl:px-10 pt-4">
-        <div className="flex flex-col lg:flex-row gap-5 items-start">
+      <div className="max-w-[1720px] mx-auto px-2.5 sm:px-6 lg:px-8 xl:px-10 pt-3 sm:pt-4">
+        <div className="flex flex-col lg:flex-row gap-3.5 sm:gap-5 items-start">
           
           {/* ========================================================= */}
           {/* SOL KOLON: TÜM KÖPEK IRKLARI & ŞEHİRLER (SAYILARLA BİREBİR) */}
           {/* ========================================================= */}
           <aside className="w-full lg:w-[320px] xl:w-[350px] shrink-0 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 shadow-2xs overflow-hidden">
             {/* SEKMELER: TÜR KATEGORİSİ / ŞEHİR KATEGORİSİ */}
-            <div className="grid grid-cols-2 text-center text-xs font-bold border-b border-neutral-200 dark:border-neutral-700">
+            <div className="grid grid-cols-2 text-center text-[11px] sm:text-xs font-bold border-b border-neutral-200 dark:border-neutral-700">
               <button
                 type="button"
                 onClick={() => {
                   setSidebarTab(1);
                   setSidebarSearch("");
                 }}
-                className={`py-2.5 px-2 transition-colors ${
+                className={`py-2 sm:py-2.5 px-2 transition-colors ${
                   sidebarTab === 1
                     ? "bg-[#dc5075] text-white"
                     : "bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200"
                 }`}
               >
-                Tür Kategorisi
+                Tür Kategorisi (48 Irk)
               </button>
               <button
                 type="button"
@@ -199,7 +199,7 @@ export default function HomePage() {
                   setSidebarTab(2);
                   setSidebarSearch("");
                 }}
-                className={`py-2.5 px-2 transition-colors ${
+                className={`py-2 sm:py-2.5 px-2 transition-colors ${
                   sidebarTab === 2
                     ? "bg-[#18b418] text-white"
                     : "bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200"
@@ -210,7 +210,7 @@ export default function HomePage() {
             </div>
 
             {/* HIZLI FİLTRELEME ARAMA KUTUSU */}
-            <div className="p-2 border-b border-neutral-100 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50">
+            <div className="p-1.5 sm:p-2 border-b border-neutral-100 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50">
               <div className="relative">
                 <input
                   type="text"
@@ -219,7 +219,7 @@ export default function HomePage() {
                   }
                   value={sidebarSearch}
                   onChange={(e) => setSidebarSearch(e.target.value)}
-                  className="w-full text-xs py-1.5 pl-7 pr-6 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
+                  className="w-full text-[11px] sm:text-xs py-1.5 pl-7 pr-6 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
                 />
                 <MagnifyingGlassIcon className="w-3.5 h-3.5 absolute left-2 top-2 text-neutral-400" />
                 {sidebarSearch && (
@@ -248,8 +248,8 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* LİSTE ALANI */}
-            <div className="max-h-[950px] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-700/60 text-xs">
+            {/* LİSTE ALANI (Mobilde kompakt 2 sütun ve orantılı yükseklik, masaüstünde 1 sütun) */}
+            <div className="max-h-[185px] sm:max-h-[260px] lg:max-h-[950px] overflow-y-auto custom-scrollbar grid grid-cols-2 lg:grid-cols-1 gap-px bg-neutral-100 dark:bg-neutral-700/60 text-xs">
               {sidebarTab === 1 ? (
                 // 1. TÜR LİSTESİ
                 filteredBreeds.length > 0 ? (
@@ -262,16 +262,16 @@ export default function HomePage() {
                         onClick={() => {
                           setSelectedBreed(isSelected ? "TÜMÜ" : breed.name);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors group ${
+                        className={`w-full flex items-center justify-between px-2 py-1.5 lg:px-3 lg:py-2.5 text-left transition-colors group ${
                           isSelected
                             ? "bg-rose-50 dark:bg-rose-950/40 text-[#dc5075] font-bold"
-                            : "hover:bg-neutral-100 dark:hover:bg-neutral-700/50 text-neutral-800 dark:text-neutral-200"
+                            : "bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700/80 text-neutral-800 dark:text-neutral-200"
                         }`}
                       >
-                        <div className="flex items-center gap-3 min-w-0 pr-2">
-                          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 shrink-0 ring-2 ${
+                        <div className="flex items-center gap-1.5 sm:gap-2.5 lg:gap-3 min-w-0 pr-1">
+                          <div className={`w-7 h-7 sm:w-9 sm:h-9 lg:w-14 lg:h-14 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 shrink-0 ring-1 lg:ring-2 ${
                             isSelected ? "ring-[#dc5075]" : "ring-neutral-200 dark:ring-neutral-600 group-hover:ring-[#dc5075]"
-                          } shadow-sm flex items-center justify-center`}>
+                          } shadow-xs flex items-center justify-center`}>
                             <img
                               src={breed.image || `/images/breeds/${breed.slug}.png`}
                               alt={breed.name}
@@ -279,10 +279,10 @@ export default function HomePage() {
                               loading="lazy"
                             />
                           </div>
-                          <span className="truncate font-bold text-xs sm:text-sm">{breed.name}</span>
+                          <span className="truncate font-bold text-[10px] sm:text-xs lg:text-sm">{breed.name}</span>
                         </div>
                         <span
-                          className={`shrink-0 text-xs font-bold px-2.5 py-0.5 rounded-full ${
+                          className={`shrink-0 text-[9px] lg:text-xs font-bold px-1.5 lg:px-2.5 py-0.5 rounded-full ${
                             isSelected
                               ? "bg-[#dc5075] text-white"
                               : "bg-amber-500 text-white"
@@ -294,7 +294,7 @@ export default function HomePage() {
                     );
                   })
                 ) : (
-                  <div className="p-4 text-center text-xs text-neutral-400">
+                  <div className="col-span-2 lg:col-span-1 p-4 text-center text-xs text-neutral-400 bg-white dark:bg-neutral-800">
                     Sonuç bulunamadı.
                   </div>
                 )
@@ -310,19 +310,15 @@ export default function HomePage() {
                         onClick={() => {
                           setSelectedCity(isSelected ? "TÜMÜ" : city.name);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2 text-left transition-colors ${
+                        className={`w-full flex items-center justify-between px-2.5 py-1.5 lg:px-3 lg:py-2 text-left transition-colors ${
                           isSelected
                             ? "bg-emerald-50 dark:bg-emerald-950/40 text-[#18b418] font-bold"
-                            : "hover:bg-neutral-100 dark:hover:bg-neutral-700/50 text-neutral-800 dark:text-neutral-200"
+                            : "bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700/80 text-neutral-800 dark:text-neutral-200"
                         }`}
                       >
-                        <span className="truncate pr-2">{city.name}</span>
+                        <span className="truncate pr-1 text-[11px] lg:text-xs">{city.name}</span>
                         <span
-                          className={`shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                            isSelected
-                              ? "bg-[#18b418] text-white"
-                              : "bg-[#18b418] text-white"
-                          }`}
+                          className={`shrink-0 text-[9px] lg:text-[11px] font-bold px-1.5 lg:px-2 py-0.5 rounded-full bg-[#18b418] text-white`}
                         >
                           {city.count}
                         </span>
@@ -330,7 +326,7 @@ export default function HomePage() {
                     );
                   })
                 ) : (
-                  <div className="p-4 text-center text-xs text-neutral-400">
+                  <div className="col-span-2 lg:col-span-1 p-4 text-center text-xs text-neutral-400 bg-white dark:bg-neutral-800">
                     Sonuç bulunamadı.
                   </div>
                 )
@@ -338,7 +334,7 @@ export default function HomePage() {
             </div>
 
             {/* GÜVENLİ PLATFORM BİLGİSİ */}
-            <div className="p-3 bg-neutral-50 dark:bg-neutral-800/80 border-t border-neutral-200 dark:border-neutral-700 text-[11px] text-neutral-600 dark:text-neutral-400 space-y-1">
+            <div className="hidden lg:block p-3 bg-neutral-50 dark:bg-neutral-800/80 border-t border-neutral-200 dark:border-neutral-700 text-[11px] text-neutral-600 dark:text-neutral-400 space-y-1">
               <div className="flex items-center gap-1.5 font-bold text-neutral-900 dark:text-neutral-100">
                 <ShieldCheckIcon className="w-4 h-4 text-[#18b418]" />
                 <span>Güvenli İlan Platformu</span>
@@ -352,18 +348,18 @@ export default function HomePage() {
           {/* ========================================================= */}
           {/* SAĞ ANA ALAN: HİKAYE ÇİFTLİKLERİ, VİTRİN VE GÜNCEL LİSTELER */}
           {/* ========================================================= */}
-          <div className="flex-1 min-w-0 space-y-5">
+          <div className="w-full flex-1 min-w-0 space-y-3.5 sm:space-y-5">
             
             {/* 1. ÖNE ÇIKAN ÇİFTLİKLER / KURUMSAL FİRMALAR (DAİRESEL ROZETLER) */}
-            <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-3 shadow-2xs">
-              <div className="flex items-center justify-between gap-4 sm:gap-6 overflow-x-auto no-scrollbar pb-1">
+            <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2 sm:p-3 shadow-2xs">
+              <div className="flex items-center justify-between gap-3 sm:gap-6 overflow-x-auto no-scrollbar pb-0.5">
                 {FEATURED_BREEDERS.map((breeder) => (
                   <Link
                     key={breeder.id}
                     href={"/uyeler" as Route}
                     className="flex flex-col items-center shrink-0 cursor-pointer group text-center"
                   >
-                    <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full p-0.5 bg-gradient-to-tr from-[#dc5075] via-amber-400 to-[#802859] group-hover:scale-105 transition-transform">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full p-0.5 bg-gradient-to-tr from-[#dc5075] via-amber-400 to-[#802859] group-hover:scale-105 transition-transform">
                       <div className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-neutral-900 p-0.5">
                         <img
                           src={breeder.image}
@@ -372,10 +368,10 @@ export default function HomePage() {
                         />
                       </div>
                     </div>
-                    <span className="text-[11px] font-bold text-neutral-800 dark:text-neutral-200 mt-1.5 group-hover:text-[#dc5075] transition-colors truncate max-w-[110px]">
+                    <span className="text-[10px] sm:text-[11px] font-bold text-neutral-800 dark:text-neutral-200 mt-1 group-hover:text-[#dc5075] transition-colors truncate max-w-[85px] sm:max-w-[110px]">
                       {breeder.name}
                     </span>
-                    <span className="text-[9px] text-neutral-500 dark:text-neutral-400">
+                    <span className="text-[8px] sm:text-[9px] text-neutral-500 dark:text-neutral-400">
                       {breeder.location}
                     </span>
                   </Link>
@@ -407,9 +403,9 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* 5-6 SÜTUNLU KART GRİDİ */}
+              {/* 5-6 SÜTUNLU KART GRİDİ (Mobilde 2 eşit kompakt sütun) */}
               {filteredVitrin.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-3.5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-3.5">
                   {filteredVitrin.map((item) => (
                     <VitrinCard key={item.id} item={item} />
                   ))}

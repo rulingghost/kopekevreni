@@ -161,7 +161,7 @@ const ListingStayDetailPage: FC = () => {
 
   // Aynı ırktan veya benzer ilanlar
   const relatedPets = useMemo(() => {
-    return MOCK_PET_LISTINGS.filter((p) => p.id !== pet.id).slice(0, 3);
+    return MOCK_PET_LISTINGS.filter((p) => p.id !== pet.id).slice(0, 4);
   }, [pet]);
 
   const getBadgeInfo = () => {
@@ -248,7 +248,7 @@ const ListingStayDetailPage: FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:h-[480px]">
             {/* Büyük Ana Fotoğraf (Sol 2 Kolon) */}
             <div
-              className="md:col-span-2 h-72 md:h-full relative overflow-hidden group cursor-pointer"
+              className="md:col-span-2 h-56 sm:h-72 md:h-full relative overflow-hidden group cursor-pointer"
               onClick={() => setSelectedImageModal(gallery[0])}
             >
               <img
@@ -577,7 +577,7 @@ const ListingStayDetailPage: FC = () => {
             <h2 className="text-xl sm:text-2xl font-black text-neutral-900 dark:text-white mb-6">
               İlginizi Çekebilecek Diğer Canlar
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
               {relatedPets.map((p) => (
                 <PetCard key={p.id} data={p} />
               ))}

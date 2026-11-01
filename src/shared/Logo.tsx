@@ -10,10 +10,10 @@ const Logo: React.FC<LogoProps> = ({ className = "", lightMode = false }) => {
   return (
     <Link
       href="/"
-      className={`ttnc-logo inline-flex items-center gap-3 focus:outline-none focus:ring-0 group ${className}`}
+      className={`ttnc-logo inline-flex items-center gap-1.5 sm:gap-3 focus:outline-none focus:ring-0 group shrink-0 ${className}`}
     >
       {/* KULLANICININ YÜKLEDİĞİ YENİ RESMİ LOGO */}
-      <div className="relative w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+      <div className="relative w-7 h-7 sm:w-11 sm:h-11 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
         <img
           src="/images/logo.png"
           alt="Köpek Evreni Logo"
@@ -23,7 +23,7 @@ const Logo: React.FC<LogoProps> = ({ className = "", lightMode = false }) => {
 
       <div className="flex flex-col">
         <span
-          className={`text-2xl font-serif font-bold tracking-tight leading-none ${
+          className={`text-base sm:text-2xl font-serif font-bold tracking-tight leading-none whitespace-nowrap ${
             lightMode ? "text-white" : "text-[#1C1917] dark:text-[#FAF8F5]"
           }`}
         >

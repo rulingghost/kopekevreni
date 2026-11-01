@@ -106,42 +106,42 @@ const ListingCarPage: FC = () => {
   }, [searchTerm, selectedSize, featureFilter]);
 
   return (
-    <div className="min-h-screen py-8 lg:py-14 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
-      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+    <div className="min-h-screen py-4 sm:py-8 lg:py-14 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
+      <div className="max-w-[1720px] mx-auto px-2.5 sm:px-6 lg:px-8 xl:px-10">
         
         {/* ÜST BAŞLIK & ARAMA BANNER */}
-        <div className="max-w-4xl mx-auto text-center space-y-4 mb-10">
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#dc5075]/10 text-[#dc5075] dark:text-[#f26ba8] font-semibold text-xs uppercase tracking-[0.2em]">
-            <SparklesIcon className="w-4 h-4" />
+        <div className="max-w-4xl mx-auto text-center space-y-2.5 sm:space-y-4 mb-5 sm:mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#dc5075]/10 text-[#dc5075] dark:text-[#f26ba8] font-semibold text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em]">
+            <SparklesIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Cinse Göre Köpek İlanları</span>
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-[#1C1917] dark:text-[#FAF8F5] tracking-tight">
+          <h1 className="font-serif text-2xl sm:text-5xl lg:text-6xl font-bold text-[#1C1917] dark:text-[#FAF8F5] tracking-tight">
             Köpek Cinsleri
           </h1>
 
-          <p className="text-sm sm:text-base text-[#78716C] dark:text-[#A8A29E] max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-xs sm:text-base text-[#78716C] dark:text-[#A8A29E] max-w-2xl mx-auto font-light leading-relaxed px-2">
             Aradığınız köpek cinsini aşağıdan arayın veya boyut ve yaşam özelliklerine göre filtreleyerek doğrudan o cinse ait güncel ilanları inceleyin.
           </p>
 
           {/* CİNSE GÖRE LİSTELE / ARAMA KUTUSU */}
-          <div className="pt-2 max-w-xl mx-auto relative">
+          <div className="pt-1 sm:pt-2 max-w-xl mx-auto relative">
             <div className="relative">
               <input
                 type="text"
-                placeholder="Cinse göre ara... (Örn: Poodle, Maltipoo, Golden, Kangal)"
+                placeholder="Cinse göre ara... (Örn: Poodle, Maltipoo, Golden)"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-10 py-3.5 rounded-full bg-white dark:bg-[#1E1C1A] border-2 border-neutral-300 dark:border-neutral-700 text-sm font-medium text-[#1C1917] dark:text-[#FAF8F5] focus:outline-none focus:border-[#dc5075] dark:focus:border-[#dc5075] shadow-md shadow-black/5 transition-all"
+                className="w-full pl-10 sm:pl-12 pr-9 sm:pr-10 py-2.5 sm:py-3.5 rounded-full bg-white dark:bg-[#1E1C1A] border-2 border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-medium text-[#1C1917] dark:text-[#FAF8F5] focus:outline-none focus:border-[#dc5075] dark:focus:border-[#dc5075] shadow-md shadow-black/5 transition-all"
               />
-              <MagnifyingGlassIcon className="w-5 h-5 text-[#dc5075] absolute left-4 top-1/2 -translate-y-1/2" />
+              <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#dc5075] absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2" />
               {searchTerm && (
                 <button
                   type="button"
                   onClick={() => setSearchTerm("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+                  className="absolute right-3.5 sm:right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
                 >
-                  <XMarkIcon className="w-5 h-5" />
+                  <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               )}
             </div>
@@ -191,17 +191,17 @@ const ListingCarPage: FC = () => {
             )}
 
             {/* POPÜLER HIZLI CİNS ETİKETLERİ */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
-              <span className="text-xs text-neutral-500 font-semibold mr-1">Hızlı Cinsler:</span>
+            <div className="flex items-center sm:justify-center gap-1.5 sm:gap-2 pt-3 sm:pt-4 overflow-x-auto no-scrollbar pb-1 sm:flex-wrap">
+              <span className="text-[11px] sm:text-xs text-neutral-500 font-semibold mr-1 shrink-0">Hızlı Cinsler:</span>
               {POPULAR_QUICK_BREEDS.map((breedName) => {
                 const foundBreed = ALL_BREEDS.find(b => b.name === breedName);
                 return (
                   <Link
                     key={breedName}
                     href={`/listing-stay?breed=${encodeURIComponent(breedName)}` as Route}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-[#dc5075] hover:text-[#dc5075] text-neutral-800 dark:text-neutral-200 transition-all shadow-xs font-bold group"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-[#dc5075] hover:text-[#dc5075] text-neutral-800 dark:text-neutral-200 transition-all shadow-xs font-bold group shrink-0"
                   >
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-700 shrink-0 ring-2 ring-neutral-300 dark:ring-neutral-600 group-hover:ring-[#dc5075]">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-700 shrink-0 ring-1 sm:ring-2 ring-neutral-300 dark:ring-neutral-600 group-hover:ring-[#dc5075]">
                       <img
                         src={foundBreed?.image || `/images/breeds/${foundBreed?.slug || 'poodle-toy'}.png`}
                         alt={breedName}
@@ -217,10 +217,10 @@ const ListingCarPage: FC = () => {
         </div>
 
         {/* FİLTRELEME BUTONLARI (BOYUT & NİTELİK - AYNEN KORUNDU) */}
-        <div className="space-y-4 mb-8 pb-6 border-b border-[#EDE7DE] dark:border-neutral-800">
+        <div className="space-y-2.5 sm:space-y-4 mb-5 sm:mb-8 pb-4 sm:pb-6 border-b border-[#EDE7DE] dark:border-neutral-800">
           {/* BOYUT FİLTRELERİ */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="text-xs uppercase tracking-wider font-semibold text-[#78716C] dark:text-[#A8A29E] mr-2">
+          <div className="flex items-center sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 sm:flex-wrap">
+            <span className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-[#78716C] dark:text-[#A8A29E] mr-1 shrink-0">
               Boyuta Göre:
             </span>
             {[
@@ -234,7 +234,7 @@ const ListingCarPage: FC = () => {
                 key={btn.id}
                 type="button"
                 onClick={() => setSelectedSize(btn.id as any)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold transition-all shrink-0 ${
                   selectedSize === btn.id
                     ? "bg-[#7A1C30] text-white shadow-md shadow-[#7A1C30]/20"
                     : "bg-white dark:bg-neutral-800 text-[#78716C] dark:text-neutral-300 border border-[#EDE7DE] dark:border-neutral-700 hover:bg-[#F2ECE1]"
@@ -246,8 +246,8 @@ const ListingCarPage: FC = () => {
           </div>
 
           {/* ÖZELLİK FİLTRELERİ */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="text-xs uppercase tracking-wider font-semibold text-[#78716C] dark:text-[#A8A29E] mr-2">
+          <div className="flex items-center sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 sm:flex-wrap">
+            <span className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-[#78716C] dark:text-[#A8A29E] mr-1 shrink-0">
               Karakter & Yaşam:
             </span>
             {[
@@ -262,7 +262,7 @@ const ListingCarPage: FC = () => {
                 key={feature.id}
                 type="button"
                 onClick={() => setFeatureFilter(feature.id as any)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold transition-all flex items-center gap-1 sm:gap-1.5 shrink-0 ${
                   featureFilter === feature.id
                     ? "bg-[#C5A059] text-white shadow-md shadow-[#C5A059]/25"
                     : "bg-white dark:bg-neutral-800 text-[#78716C] dark:text-neutral-300 border border-[#EDE7DE] dark:border-neutral-700 hover:bg-[#F2ECE1]"
@@ -275,7 +275,7 @@ const ListingCarPage: FC = () => {
         </div>
 
         {/* SONUÇ BİLGİSİ VE GRİD */}
-        <div className="flex items-center justify-between mb-6 text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E]">
+        <div className="flex items-center justify-between mb-3 sm:mb-6 text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E]">
           <span>
             Toplam <strong className="text-[#1C1917] dark:text-[#FAF8F5] font-serif text-base">{filteredBreeds.length}</strong> ırk listeleniyor
           </span>
@@ -294,9 +294,9 @@ const ListingCarPage: FC = () => {
           )}
         </div>
 
-        {/* TÜM IRKLAR GRİDİ */}
+        {/* TÜM IRKLAR GRİDİ (Mobilde 2 kompakt sütun) */}
         {filteredBreeds.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-2.5 sm:gap-6">
             {filteredBreeds.map((breed) => (
               <BreedCard key={breed.id} breed={breed} />
             ))}

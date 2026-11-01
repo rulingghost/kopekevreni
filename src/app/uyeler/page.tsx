@@ -116,33 +116,33 @@ export const CORPORATE_COMPANIES: MemberCompany[] = [
 
 export default function UyelerPage() {
   return (
-    <div className="min-h-screen py-10 lg:py-14 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
-      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 space-y-10">
+    <div className="min-h-screen py-4 sm:py-10 lg:py-14 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
+      <div className="max-w-[1720px] mx-auto px-2.5 sm:px-6 lg:px-8 xl:px-10 space-y-5 sm:space-y-10">
         {/* ÜST BAŞLIK */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#dc5075]/10 text-[#dc5075] font-bold text-xs uppercase tracking-wider">
-            <BuildingStorefrontIcon className="w-4 h-4" />
+        <div className="text-center max-w-3xl mx-auto space-y-2 sm:space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#dc5075]/10 text-[#dc5075] font-bold text-[10px] sm:text-xs uppercase tracking-wider">
+            <BuildingStorefrontIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Kurumsal Firmalar, Çiftlikler & Kulüpler</span>
           </div>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-[#1C1917] dark:text-[#FAF8F5]">
+          <h1 className="font-serif text-2xl sm:text-5xl font-bold text-[#1C1917] dark:text-[#FAF8F5]">
             Kurumsal Üyelerimiz
           </h1>
-          <p className="text-sm text-[#78716C] dark:text-[#A8A29E]">
+          <p className="text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E] px-2">
             Köpek Evreni platformunda yer alan doğrulanmış 6 kurumsal firma, çiftlik ve popüler ırk kulüpleri.
           </p>
         </div>
 
         {/* 6 FİRMA GRİDİ */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {CORPORATE_COMPANIES.map((company) => (
             <div
               key={company.id}
-              className="bg-white dark:bg-[#1E1C1A] border border-neutral-200 dark:border-neutral-800 rounded-3xl p-6 shadow-xs hover:shadow-lg hover:border-[#dc5075]/40 transition-all flex flex-col justify-between space-y-5"
+              className="bg-white dark:bg-[#1E1C1A] border border-neutral-200 dark:border-neutral-800 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-xs hover:shadow-lg hover:border-[#dc5075]/40 transition-all flex flex-col justify-between space-y-3 sm:space-y-5"
             >
-              <div className="space-y-4">
+              <div className="space-y-2.5 sm:space-y-4">
                 {/* Üst Firma Başlık & Avatar */}
-                <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-[#dc5075] via-amber-400 to-[#802859] shrink-0">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-12 h-12 sm:w-20 sm:h-20 rounded-full p-0.5 sm:p-1 bg-gradient-to-tr from-[#dc5075] via-amber-400 to-[#802859] shrink-0">
                     <img
                       src={company.image}
                       alt={company.name}
@@ -150,15 +150,15 @@ export default function UyelerPage() {
                     />
                   </div>
                   <div className="min-w-0">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold mb-1">
+                    <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 text-[9px] sm:text-[10px] font-bold mb-0.5 sm:mb-1">
                       {company.badge}
                     </span>
-                    <h3 className="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-100 flex items-center gap-1 truncate">
+                    <h3 className="font-bold text-sm sm:text-lg text-neutral-900 dark:text-neutral-100 flex items-center gap-1 truncate">
                       <span className="truncate">{company.name}</span>
-                      <CheckBadgeIcon className="w-5 h-5 text-blue-500 shrink-0" />
+                      <CheckBadgeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 shrink-0" />
                     </h3>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1 mt-0.5">
-                      <MapPinIcon className="w-3.5 h-3.5 text-[#dc5075] shrink-0" />
+                    <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1 mt-0.5">
+                      <MapPinIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#dc5075] shrink-0" />
                       <span>
                         {company.city} / {company.district}
                       </span>
@@ -167,21 +167,21 @@ export default function UyelerPage() {
                 </div>
 
                 {/* Firma Açıklaması */}
-                <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                <p className="text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
                   {company.description}
                 </p>
 
                 {/* Uzmanlık Irkları */}
-                <div className="space-y-1.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 block">
+                <div className="space-y-1">
+                  <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-neutral-400 block">
                     Öne Çıkan Cinsler:
                   </span>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1 sm:gap-1.5">
                     {company.specialties.map((spec) => (
                       <Link
                         key={spec}
                         href={`/listing-stay?breed=${encodeURIComponent(spec)}` as Route}
-                        className="px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-[#dc5075] hover:text-white text-neutral-700 dark:text-neutral-300 text-[11px] font-semibold transition-colors"
+                        className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-[#dc5075] hover:text-white text-neutral-700 dark:text-neutral-300 text-[10px] sm:text-[11px] font-semibold transition-colors"
                       >
                         🐾 {spec}
                       </Link>
@@ -191,8 +191,8 @@ export default function UyelerPage() {
               </div>
 
               {/* Alt İletişim & İlanlar Butonu */}
-              <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 space-y-3">
-                <div className="flex items-center justify-between text-xs text-neutral-500">
+              <div className="pt-2.5 sm:pt-4 border-t border-neutral-100 dark:border-neutral-800 space-y-2 sm:space-y-3">
+                <div className="flex items-center justify-between text-[11px] sm:text-xs text-neutral-500">
                   <span className="flex items-center gap-1 font-medium text-neutral-700 dark:text-neutral-300">
                     <PhoneIcon className="w-3.5 h-3.5 text-emerald-600" />
                     {company.phone}
@@ -204,7 +204,7 @@ export default function UyelerPage() {
 
                 <Link
                   href={`/listing-stay?city=${encodeURIComponent(company.city)}` as Route}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#dc5075] hover:bg-[#c23d60] text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-xs"
+                  className="w-full py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl bg-[#dc5075] hover:bg-[#c23d60] text-white text-[11px] sm:text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <span>Firmanın İlanlarını İncele</span>
                   <ArrowRightIcon className="w-3.5 h-3.5" />
@@ -215,27 +215,27 @@ export default function UyelerPage() {
         </div>
 
         {/* TÜM CİNSLER HIZLI GEÇİŞ */}
-        <div className="bg-white dark:bg-[#1E1C1A] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 space-y-4">
-          <h2 className="font-bold text-base text-neutral-900 dark:text-neutral-100">
+        <div className="bg-white dark:bg-[#1E1C1A] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-3.5 sm:p-6 space-y-3 sm:space-y-4">
+          <h2 className="font-bold text-sm sm:text-base text-neutral-900 dark:text-neutral-100">
             Cinslere Göre İlan Grupları
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3">
             {ALL_BREEDS.slice(0, 18).map((b) => (
               <Link
                 key={b.slug}
                 href={`/listing-stay?breed=${encodeURIComponent(b.name)}` as Route}
-                className="flex items-center gap-2.5 p-2 rounded-xl border border-neutral-100 dark:border-neutral-800 hover:border-[#dc5075] transition-all group"
+                className="flex items-center gap-2 sm:gap-2.5 p-1.5 sm:p-2 rounded-xl border border-neutral-100 dark:border-neutral-800 hover:border-[#dc5075] transition-all group"
               >
                 <img
                   src={b.image || `/images/breeds/${b.slug}.png`}
                   alt={b.name}
-                  className="w-11 h-11 rounded-full object-cover ring-2 ring-neutral-200 dark:ring-neutral-700 group-hover:ring-[#dc5075] shrink-0"
+                  className="w-8 h-8 sm:w-11 sm:h-11 rounded-full object-cover ring-1 sm:ring-2 ring-neutral-200 dark:ring-neutral-700 group-hover:ring-[#dc5075] shrink-0"
                 />
                 <div className="min-w-0">
-                  <div className="text-xs font-bold text-neutral-800 dark:text-neutral-200 truncate group-hover:text-[#dc5075]">
+                  <div className="text-[11px] sm:text-xs font-bold text-neutral-800 dark:text-neutral-200 truncate group-hover:text-[#dc5075]">
                     {b.name}
                   </div>
-                  <div className="text-[10px] text-neutral-400">{b.count} İlan</div>
+                  <div className="text-[9px] sm:text-[10px] text-neutral-400">{b.count} İlan</div>
                 </div>
               </Link>
             ))}

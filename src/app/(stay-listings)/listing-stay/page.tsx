@@ -278,12 +278,12 @@ const ListingStayPage: FC = () => {
   }, [filters.breed, sortBy, urlSort]);
 
   return (
-    <div className="min-h-screen py-8 lg:py-12 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
-      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+    <div className="min-h-screen py-4 sm:py-8 lg:py-12 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
+      <div className="max-w-[1720px] mx-auto px-2.5 sm:px-6 lg:px-8 xl:px-10">
         {/* ÜST BAŞLIK VE KATEGORİ SEKMELERİ */}
-        <div className="pb-6 border-b border-[#EDE7DE] dark:border-neutral-800 mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="pb-3 sm:pb-6 border-b border-[#EDE7DE] dark:border-neutral-800 mb-4 sm:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-3">
           <div>
-            <h1 className="font-serif text-3xl sm:text-5xl font-bold text-[#1C1917] dark:text-[#FAF8F5] tracking-tight">
+            <h1 className="font-serif text-xl sm:text-5xl font-bold text-[#1C1917] dark:text-[#FAF8F5] tracking-tight">
               {pageHeading}
             </h1>
             <p className="text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E] mt-1 font-light">
@@ -293,7 +293,7 @@ const ListingStayPage: FC = () => {
         </div>
 
         {/* ANA İÇERİK: SOL FİLTRE & SAĞ GRİD */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3.5 sm:gap-8">
           {/* SOL FİLTRE KOLONU */}
           <div className="lg:col-span-1">
             <PetListingFilter
@@ -313,7 +313,7 @@ const ListingStayPage: FC = () => {
           {/* SAĞ İLAN LİSTELEME KOLONU */}
           <div className="lg:col-span-3 space-y-6">
             {/* SONUÇ SAYACI VE SIRALAMA */}
-            <div className="bg-white dark:bg-[#1E1C1A] border border-[#EDE7DE] dark:border-neutral-800 rounded-2xl px-5 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+            <div className="bg-white dark:bg-[#1E1C1A] border border-[#EDE7DE] dark:border-neutral-800 rounded-xl sm:rounded-2xl px-3 py-2.5 sm:px-5 sm:py-3.5 flex flex-row items-center justify-between gap-2 shadow-sm">
               <div className="text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E]">
                 Toplam{" "}
                 <strong className="text-[#1C1917] dark:text-[#FAF8F5] font-serif text-base">
@@ -338,7 +338,7 @@ const ListingStayPage: FC = () => {
 
             {/* İLAN GRİDİ */}
             {filteredListings.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-2.5 sm:gap-5">
                 {filteredListings.map((pet) => (
                   <PetCard key={pet.id} pet={pet} />
                 ))}
