@@ -167,14 +167,6 @@ export default function IlanlarimPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={"/add-listing/1" as Route}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#dc5075] hover:bg-[#c23d60] text-white text-xs font-bold shadow-sm transition-all"
-            >
-              <PlusCircleIcon className="w-4 h-4" />
-              <span>+ Yeni İlan Ekle</span>
-            </Link>
-
             <button
               type="button"
               onClick={logout}

@@ -22,7 +22,6 @@ const widgetMenus: WidgetFooterMenu[] = [
       { href: ("/listing-stay?sort=vitrin") as Route, label: "Vitrin İlanları" },
       { href: ("/listing-stay?sort=NEWEST") as Route, label: "Yeni Eklenen İlanlar" },
       { href: "/listing-car" as Route, label: "Köpek Cinsleri" },
-      { href: "/add-listing/1" as Route, label: "+ Yeni İlan Ver" },
     ],
   },
   {
@@ -87,13 +86,13 @@ const Footer: React.FC = () => {
     <footer className="nc-Footer relative py-16 lg:py-20 bg-[#1C1917] text-[#FAF8F5] border-t border-neutral-800">
       <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
         <div className="grid grid-cols-2 gap-y-10 gap-x-6 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10 pb-12 border-b border-neutral-800">
-          <div className="col-span-2 md:col-span-4 lg:col-span-1 flex flex-col space-y-4">
+          <div className="col-span-2 md:col-span-4 lg:col-span-1 flex flex-col space-y-4 min-w-0 pr-2">
             <Logo lightMode={true} />
             <p className="text-xs text-[#A8A29E] leading-relaxed font-light">
               Köpekleri olanlar ile köpek arayanları bir araya getiren Türkiye'nin güncel köpek ilanları ve ırk portalı.
             </p>
-            <div className="pt-2">
-              <SocialsList1 className="flex items-center space-x-3 text-neutral-400" />
+            <div className="pt-1">
+              <SocialsList1 />
             </div>
           </div>
           {widgetMenus.map(renderWidgetMenuItem)}

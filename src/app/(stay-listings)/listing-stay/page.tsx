@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { FC, useState, useMemo, useEffect } from "react";
 import PetCard from "@/components/PetCard";
@@ -289,32 +289,6 @@ const ListingStayPage: FC = () => {
             <p className="text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E] mt-1 font-light">
               Tüm güncel köpek ilanları, vitrin ilanları ve ırk bazlı filtreleme
             </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-            <button
-              type="button"
-              onClick={() => setSortBy("VITRIN")}
-              className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all ${
-                sortBy === "VITRIN"
-                  ? "bg-[#dc5075] text-white shadow-md"
-                  : "bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 border border-[#EDE7DE] dark:border-neutral-700 hover:border-[#dc5075]"
-              }`}
-            >
-              ✨ Vitrin İlanları
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSortBy("NEWEST")}
-              className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all ${
-                sortBy === "NEWEST"
-                  ? "bg-[#dc5075] text-white shadow-md"
-                  : "bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 border border-[#EDE7DE] dark:border-neutral-700 hover:border-[#dc5075]"
-              }`}
-            >
-              ⚡ Yeni Eklenen İlanlar
-            </button>
           </div>
         </div>
 
