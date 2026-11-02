@@ -297,7 +297,7 @@ export default function HomePage() {
             {FEATURED_BREEDERS.map((breeder) => (
               <Link
                 key={breeder.id}
-                href={breeder.href as Route}
+                href={"/uyeler" as Route}
                 className="flex flex-col items-center shrink-0 w-16 text-center"
               >
                 <div className="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-[#dc5075] to-amber-500">
@@ -417,7 +417,7 @@ export default function HomePage() {
                 const newCity = e.target.value;
                 setMapCity(newCity);
                 const dList = getDistrictsOfCity(newCity);
-                setMapDistrict(dList[0] || "Merkez");
+                setMapDistrict(dList[0]?.name || "Merkez");
               }}
               className="w-full text-xs font-semibold rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-2 text-neutral-800 dark:text-neutral-100"
             >
@@ -434,8 +434,8 @@ export default function HomePage() {
               className="w-full text-xs font-semibold rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-2 text-neutral-800 dark:text-neutral-100"
             >
               {currentMapDistricts.map((d) => (
-                <option key={d} value={d}>
-                  {d}
+                <option key={d.name} value={d.name}>
+                  {d.name}
                 </option>
               ))}
             </select>
@@ -650,11 +650,11 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 pt-1">
+              <div className="grid grid-cols-4 md:grid-cols-6 gap-2.5 pt-1">
                 {FEATURED_BREEDERS.map((breeder) => (
                   <Link
                     key={breeder.id}
-                    href={breeder.href as Route}
+                    href={"/uyeler" as Route}
                     className="group flex flex-col items-center text-center p-1.5 rounded-lg hover:bg-rose-50/50 dark:hover:bg-neutral-700/40 transition-all"
                   >
                     <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#dc5075] p-0.5 bg-white shadow-xs group-hover:scale-105 transition-transform">
@@ -669,7 +669,7 @@ export default function HomePage() {
                       {breeder.name}
                     </span>
                     <span className="text-[9px] text-neutral-400 dark:text-neutral-500 line-clamp-1">
-                      {breeder.subtitle}
+                      {breeder.location}
                     </span>
                   </Link>
                 ))}
@@ -812,7 +812,7 @@ export default function HomePage() {
                       const newCity = e.target.value;
                       setMapCity(newCity);
                       const dList = getDistrictsOfCity(newCity);
-                      setMapDistrict(dList[0] || "Merkez");
+                      setMapDistrict(dList[0]?.name || "Merkez");
                     }}
                     className="text-xs font-semibold rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 px-3 py-2 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
                   >
@@ -829,8 +829,8 @@ export default function HomePage() {
                     className="text-xs font-semibold rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 px-3 py-2 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
                   >
                     {currentMapDistricts.map((d) => (
-                      <option key={d} value={d}>
-                        {d}
+                      <option key={d.name} value={d.name}>
+                        {d.name}
                       </option>
                     ))}
                   </select>
