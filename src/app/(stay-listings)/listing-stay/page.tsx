@@ -50,6 +50,8 @@ const ListingStayPage: FC = () => {
     city: urlCity || "",
   });
 
+  const [searchQuery, setSearchQuery] = useState<string>(urlQuery || "");
+
   const [sortBy, setSortBy] = useState<"NEWEST" | "POPULAR" | "VITRIN">(() => {
     if (urlSort?.toLowerCase() === "vitrin") return "VITRIN";
     if (urlSort?.toUpperCase() === "POPULAR") return "POPULAR";
@@ -71,6 +73,7 @@ const ListingStayPage: FC = () => {
       breed: urlBreed || "",
       city: urlCity || "",
     }));
+    setSearchQuery(urlQuery || "");
     if (urlSort?.toLowerCase() === "vitrin") {
       setSortBy("VITRIN");
     } else if (urlSort?.toLowerCase() === "newest") {
@@ -83,7 +86,7 @@ const ListingStayPage: FC = () => {
       const d = getDistrictsOfCity(urlCity);
       setMapDistrict(d[0]?.name || "Merkez");
     }
-  }, [urlType, urlBreed, urlCity, urlSort]);
+  }, [urlType, urlBreed, urlCity, urlQuery, urlSort]);
 
   const allCombinedListings: PetListing[] = useMemo(() => {
     const convertedVitrin: PetListing[] = VITRIN_LISTINGS.map((v) => {
@@ -217,10 +220,11 @@ const ListingStayPage: FC = () => {
           return false;
         }
         if (
-          urlQuery &&
-          !pet.title.toLowerCase().includes(urlQuery.toLowerCase()) &&
-          !pet.description.toLowerCase().includes(urlQuery.toLowerCase()) &&
-          !pet.breed.toLowerCase().includes(urlQuery.toLowerCase())
+          searchQuery.trim() &&
+          !pet.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          !pet.description.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          !pet.breed.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          !pet.location.city.toLowerCase().includes(searchQuery.toLowerCase())
         ) {
           return false;
         }
@@ -257,10 +261,11 @@ const ListingStayPage: FC = () => {
         }
         return b.likesCount - a.likesCount;
       });
-  }, [allCombinedListings, filters, sortBy, urlQuery]);
+  }, [allCombinedListings, filters, sortBy, searchQuery]);
 
   const handleReset = () => {
     setFilters(initialFilterState);
+    setSearchQuery("");
     setSortBy("NEWEST");
   };
 
@@ -342,6 +347,20 @@ const ListingStayPage: FC = () => {
                 >
                   Kapat ✕
                 </button>
+              </div>
+
+              {/* Kelime ile İlan veya Irk Arama */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-neutral-500 uppercase">
+                  Kelime İle Ara
+                </label>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Irk, şehir veya ilan başlığı yazın..."
+                  className="w-full text-xs font-semibold bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-3 py-2.5 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
+                />
               </div>
 
               {/* Sıralama & Kategori */}

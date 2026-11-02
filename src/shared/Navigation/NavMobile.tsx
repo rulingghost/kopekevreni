@@ -135,14 +135,14 @@ const NavMobile: React.FC<NavMobileProps> = ({
                 loginAsDemo();
                 onClickClose?.();
               }}
-              className="w-full py-2 px-3 rounded-xl bg-emerald-600 text-white text-[11px] font-bold text-center shadow-xs"
+              className="w-full py-2 px-3 rounded-xl bg-emerald-600 text-white text-[11px] font-bold text-center shadow-xs whitespace-nowrap"
             >
-              🚀 Örnek Kullanıcı İle Tek Tıkla Giriş Yap
+              🚀 Örnek Kullanıcı İle Giriş Yap
             </button>
             <Link
               href={"/login" as Route}
               onClick={onClickClose}
-              className="block w-full py-1.5 px-3 rounded-xl border border-neutral-300 dark:border-neutral-700 text-center text-[11px] font-bold text-neutral-700 dark:text-neutral-200"
+              className="block w-full py-1.5 px-3 rounded-xl border border-neutral-300 dark:border-neutral-700 text-center text-[11px] font-bold text-neutral-700 dark:text-neutral-200 whitespace-nowrap"
             >
               E-Posta ve Şifre İle Giriş Yap
             </Link>

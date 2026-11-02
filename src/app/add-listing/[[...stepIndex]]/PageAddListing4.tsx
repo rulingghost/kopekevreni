@@ -303,14 +303,14 @@ const PageAddListing4: FC<PageAddListing4Props> = () => {
           type="button"
           disabled={!agreement1 || !agreement2}
           onClick={() => setIsPublished(true)}
-          className={`w-full py-4 rounded-2xl font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 ${
+          className={`w-full py-3.5 sm:py-4 px-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base shadow-lg transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
             agreement1 && agreement2
               ? "bg-[#dc5075] hover:bg-[#c23d60] text-white shadow-[#dc5075]/25 cursor-pointer"
               : "bg-neutral-300 dark:bg-neutral-700 text-neutral-500 cursor-not-allowed"
           }`}
         >
-          <SparklesIcon className="w-5 h-5" />
-          🐾 İlanı Doğrula ve Yayınla
+          <SparklesIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+          <span>🐾 İlanı Doğrula ve Yayınla</span>
         </button>
       </div>
     </div>

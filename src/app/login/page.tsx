@@ -93,10 +93,10 @@ const PageLogin: FC = () => {
             <button
               type="button"
               onClick={handleQuickDemoLogin}
-              className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap"
             >
-              <span>🚀 Tek Tıkla Örnek Kullanıcı İle Giriş Yap</span>
-              <ArrowRightIcon className="w-4 h-4" />
+              <span>🚀 Örnek Kullanıcı İle Giriş Yap</span>
+              <ArrowRightIcon className="w-4 h-4 shrink-0" />
             </button>
 
             {/* GİRİŞ FORMU */}

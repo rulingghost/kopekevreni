@@ -52,9 +52,9 @@ export default function IlanlarimPage() {
           <button
             type="button"
             onClick={loginAsDemo}
-            className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all"
+            className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all whitespace-nowrap"
           >
-            🚀 Tek Tıkla Örnek Kullanıcı İle Giriş Yap
+            🚀 Örnek Kullanıcı İle Giriş Yap
           </button>
 
           <form

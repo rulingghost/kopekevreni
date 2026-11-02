@@ -46,15 +46,9 @@ const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
           </span>
         </Link>
 
-        {/* Sağ: Sadece Kompakt Arama İkonu ve Hamburger Menü */}
+        {/* Sağ: Çalışan Canlı Arama Butonu ve Hamburger Menü */}
         <div className="flex items-center gap-1 shrink-0">
-          <Link
-            href={"/listing-stay" as Route}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-            title="İlanlarda Ara"
-          >
-            <MagnifyingGlassIcon className="w-5 h-5" />
-          </Link>
+          <SearchDropdown />
           <MenuBar />
         </div>
       </div>

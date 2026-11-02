@@ -41,36 +41,36 @@ const PageAddListing3: FC<PageAddListing3Props> = () => {
     <div className="space-y-8">
       {/* FOTOĞRAF YÜKLEME ALANI */}
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-            Fotoğraf Galerisi (En az 1, en fazla 5 fotoğraf)
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <h3 className="text-sm sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+            Fotoğraf Galerisi (1 - 5 Fotoğraf)
           </h3>
-          <span className="text-xs text-neutral-500 font-medium">
+          <span className="text-xs text-neutral-500 font-medium whitespace-nowrap">
             {images.length} / 5 Fotoğraf
           </span>
         </div>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-5">
+        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mb-4 sm:mb-5">
           Dostunuzun doğal ışıkta çekilmiş, yüzü ve vücudu net görünen fotoğrafları sahiplenilme hızını 4 kat artırır.
         </p>
 
         {/* DRAG & DROP ZONE */}
-        <div className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-2xl p-6 sm:p-8 text-center bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100/50 dark:hover:bg-neutral-800 transition-colors">
-          <PhotoIcon className="w-12 h-12 text-primary-500 mx-auto mb-3" />
-          <h4 className="font-semibold text-sm text-neutral-800 dark:text-neutral-200">
+        <div className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-2xl p-4 sm:p-8 text-center bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100/50 dark:hover:bg-neutral-800 transition-colors">
+          <PhotoIcon className="w-10 h-10 sm:w-12 sm:h-12 text-primary-500 mx-auto mb-2 sm:mb-3" />
+          <h4 className="font-semibold text-xs sm:text-sm text-neutral-800 dark:text-neutral-200">
             Fotoğrafları buraya sürükleyin veya cihazınızdan seçin
           </h4>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 mb-4">
-            PNG, JPG veya WEBP formatında (Maksimum 5MB / görsel)
+          <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-1 mb-3.5 sm:mb-4">
+            PNG, JPG veya WEBP formatında (Maks. 5MB / görsel)
           </p>
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <button
               type="button"
               onClick={handleAddSampleImage}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 transition-colors shadow-sm"
+              className="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 transition-colors shadow-sm whitespace-nowrap"
             >
               + Örnek Fotoğraf Ekle
             </button>
-            <label className="px-4 py-2 rounded-xl text-xs font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-colors cursor-pointer shadow-sm">
+            <label className="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-colors cursor-pointer shadow-sm whitespace-nowrap">
               Dosya Seç
               <input type="file" multiple accept="image/*" className="hidden" />
             </label>

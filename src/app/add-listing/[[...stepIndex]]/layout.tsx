@@ -81,9 +81,9 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children, params }) => {
           <button
             type="button"
             onClick={loginAsDemo}
-            className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all"
+            className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all whitespace-nowrap"
           >
-            🚀 Tek Tıkla Örnek Kullanıcı İle Giriş Yap
+            🚀 Örnek Kullanıcı İle Giriş Yap
           </button>
 
           {/* NORMAL E-POSTA & ŞİFRE GİRİŞ FORMU */}
@@ -137,10 +137,58 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children, params }) => {
   }
 
   return (
-    <div className="nc-PageAddListing1 px-4 max-w-3xl mx-auto pb-24 pt-8 sm:py-14 lg:pb-32 bg-[#FAF8F5] dark:bg-[#151312] min-h-screen transition-colors">
-      <div className="space-y-8">
-        {/* AKTİF İLAN VEREN ÜYE BİLGİ BANTI */}
-        <div className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/70 text-xs">
+    <div className="nc-PageAddListing1 px-3 sm:px-4 max-w-3xl mx-auto pb-24 pt-3 sm:py-14 lg:pb-32 bg-[#FAF8F5] dark:bg-[#151312] min-h-screen transition-colors">
+      <div className="space-y-4 sm:space-y-8">
+        {/* MOBİL KOMPAKT ÜST İLAN VERME BARI (< 768px) */}
+        <div className="md:hidden bg-white dark:bg-[#1E1C1A] rounded-2xl p-3.5 shadow-sm border border-[#EDE7DE] dark:border-neutral-800 space-y-2.5">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#7A1C30] text-white whitespace-nowrap">
+                Adım {index}/4
+              </span>
+              <h1 className="font-serif text-sm font-bold text-[#1C1917] dark:text-[#FAF8F5] truncate">
+                {STEP_TITLES[index]?.title || "İlan Oluştur"}
+              </h1>
+            </div>
+            <Link
+              href={"/ilanlarim" as Route}
+              className="shrink-0 text-[11px] font-bold text-[#dc5075] whitespace-nowrap"
+            >
+              İlanlarım →
+            </Link>
+          </div>
+
+          {/* İNCE İLERLEME ÇUBUĞU */}
+          <div className="w-full bg-[#FAF8F5] dark:bg-neutral-800 h-1.5 rounded-full overflow-hidden">
+            <div
+              className="bg-[#7A1C30] h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+
+          {/* 4 ADIM SEÇİCİ PILL */}
+          <div className="grid grid-cols-4 gap-1.5 text-[11px] font-bold text-center">
+            {[1, 2, 3, 4].map((step) => (
+              <Link
+                key={step}
+                href={`/add-listing/${step}` as Route}
+                className={`py-1.5 px-1 rounded-lg transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
+                  step === index
+                    ? "bg-[#7A1C30] text-white shadow-xs"
+                    : step < index
+                    ? "bg-emerald-50 dark:bg-emerald-950/30 text-[#2E6B4A] dark:text-emerald-400"
+                    : "bg-neutral-100 dark:bg-neutral-800 text-[#A8A29E] dark:text-neutral-500"
+                }`}
+              >
+                {step < index && <CheckCircleIcon className="w-3 h-3 text-[#2E6B4A] shrink-0" />}
+                <span>{step}. Adım</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* MASAÜSTÜ AKTİF İLAN VEREN ÜYE BİLGİ BANTI (>= 768px) */}
+        <div className="hidden md:flex flex-wrap items-center justify-between gap-2 px-5 py-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/70 text-xs">
           <div className="flex items-center gap-2.5">
             <img
               src={user.avatar}
@@ -163,8 +211,8 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children, params }) => {
           </Link>
         </div>
 
-        {/* PROGRESS HEADER */}
-        <div className="bg-white dark:bg-[#1E1C1A] rounded-3xl p-6 sm:p-7 shadow-sm border border-[#EDE7DE] dark:border-neutral-800">
+        {/* MASAÜSTÜ PROGRESS HEADER (>= 768px) */}
+        <div className="hidden md:block bg-white dark:bg-[#1E1C1A] rounded-3xl p-6 sm:p-7 shadow-sm border border-[#EDE7DE] dark:border-neutral-800">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
             <div>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#7A1C30]/10 text-[#7A1C30] dark:text-[#E2A9B5] mb-2">
@@ -216,17 +264,17 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children, params }) => {
         </div>
 
         {/* STEP CONTENT WRAP */}
-        <div className="listingSection__wrap bg-white dark:bg-[#1E1C1A] rounded-3xl p-6 sm:p-8 shadow-sm border border-[#EDE7DE] dark:border-neutral-800">
+        <div className="listingSection__wrap bg-white dark:bg-[#1E1C1A] rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-[#EDE7DE] dark:border-neutral-800">
           {children}
         </div>
 
         {/* BOTTOM NAVIGATION BUTTONS */}
         {index < 4 && (
-          <div className="flex items-center justify-between pt-4 border-t border-[#EDE7DE] dark:border-neutral-800">
+          <div className="flex items-center justify-between gap-3 pt-3 sm:pt-4 border-t border-[#EDE7DE] dark:border-neutral-800">
             {index > 1 ? (
               <Link
                 href={backHref}
-                className="px-6 py-3 rounded-full border border-[#EDE7DE] dark:border-neutral-700 text-xs sm:text-sm font-semibold text-[#1C1917] dark:text-[#FAF8F5] hover:bg-[#F2ECE1] transition-colors"
+                className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border border-[#EDE7DE] dark:border-neutral-700 text-xs sm:text-sm font-semibold text-[#1C1917] dark:text-[#FAF8F5] hover:bg-[#F2ECE1] transition-colors whitespace-nowrap"
               >
                 ← Geri Dön
               </Link>
@@ -236,7 +284,7 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children, params }) => {
 
             <Link
               href={nextHref}
-              className="px-8 py-3.5 rounded-full bg-[#7A1C30] hover:bg-[#601424] text-white text-xs sm:text-sm font-semibold shadow-md shadow-[#7A1C30]/20 transition-all"
+              className="px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full bg-[#7A1C30] hover:bg-[#601424] text-white text-xs sm:text-sm font-semibold shadow-md shadow-[#7A1C30]/20 transition-all whitespace-nowrap"
             >
               {nextBtnText} →
             </Link>

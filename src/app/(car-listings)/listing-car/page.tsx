@@ -282,9 +282,9 @@ const ListingCarPage: FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#dc5075] text-white text-xs font-bold shadow-xs group-hover:bg-[#c93f64] transition-colors shrink-0">
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#dc5075] text-white text-xs font-bold shadow-xs group-hover:bg-[#c93f64] transition-colors shrink-0 whitespace-nowrap">
                         <span>🐾 İlanları Gör</span>
-                        <ArrowRightIcon className="w-3.5 h-3.5" />
+                        <ArrowRightIcon className="w-3.5 h-3.5 shrink-0" />
                       </div>
                     </Link>
                   ))

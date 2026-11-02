@@ -49,39 +49,39 @@ const PageAddListing1: FC<PageAddListing1Props> = () => {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* İLAN TÜRÜ SEÇİMİ */}
       <div>
-        <label className="block text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
+        <label className="block text-sm sm:text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-1.5 sm:mb-2">
           1. İlan Türünü Belirleyin <span className="text-red-500">*</span>
         </label>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mb-3 sm:mb-4">
           İlanınızın amacına en uygun kategoriyi seçin. Unutmayın, Köpek Evreni'nde her türlü ticari satış kesinlikle yasaktır.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           {LISTING_TYPES.map((item) => (
             <button
               key={item.id}
               type="button"
               onClick={() => setSelectedType(item.id)}
-              className={`p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between ${
+              className={`p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border text-left transition-all relative flex flex-col justify-between ${
                 selectedType === item.id
                   ? `${item.borderActive} shadow-sm`
                   : "border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 bg-white dark:bg-neutral-800"
               }`}
             >
               <div>
-                <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold mb-2.5 ${item.badgeColor}`}>
+                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-semibold mb-1.5 sm:mb-2.5 ${item.badgeColor}`}>
                   {item.badge}
                 </span>
-                <h3 className="font-semibold text-base text-neutral-900 dark:text-neutral-100 mb-1.5">
+                <h3 className="font-semibold text-sm sm:text-base text-neutral-900 dark:text-neutral-100 mb-1">
                   {item.title}
                 </h3>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
                   {item.desc}
                 </p>
               </div>
-              <div className="mt-4 flex items-center justify-end">
+              <div className="mt-3 sm:mt-4 flex items-center justify-end">
                 <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                   selectedType === item.id
                     ? "border-primary-600 bg-primary-600"

@@ -164,13 +164,13 @@ const PageAddListing2: FC<PageAddListing2Props> = () => {
 
       {/* SAĞLIK VE DURUM ROZETLERİ */}
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+          <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100">
             Sağlık, Aşı ve Bakım Durumları
           </h3>
           <span className="text-xs text-primary-600 font-medium">Seçimi kartlara tıklayarak yapabilirsiniz</span>
         </div>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-5">
+        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mb-4 sm:mb-5">
           Aşağıdaki onay rozetleri ilan kartınızın üstünde yeşil onay işaretiyle görünür ve güven oranını artırır.
         </p>
 
