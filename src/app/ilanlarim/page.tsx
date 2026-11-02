@@ -49,37 +49,13 @@ export default function IlanlarimPage() {
             </p>
           </div>
 
-          <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-900 dark:text-amber-300">
-                <SparklesIcon className="w-4 h-4 text-[#dc5075]" />
-                <span>Örnek Kullanıcı Bilgileri</span>
-              </span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white">
-                Hazır Hesap
-              </span>
-            </div>
-
-            <div className="text-xs space-y-1 bg-white dark:bg-neutral-900 p-2.5 rounded-xl border border-amber-200/60 dark:border-neutral-800 font-mono text-neutral-700 dark:text-neutral-300">
-              <div className="truncate">
-                <strong>E-posta:</strong> {SAMPLE_DEMO_USER.email}
-              </div>
-              <div>
-                <strong>Şifre:</strong> 123456
-              </div>
-              <div className="truncate">
-                <strong>Üye:</strong> {SAMPLE_DEMO_USER.name} (3 İlan)
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={loginAsDemo}
-              className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all"
-            >
-              🚀 Örnek Kullanıcı İle Hemen Giriş Yap
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={loginAsDemo}
+            className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all"
+          >
+            🚀 Tek Tıkla Örnek Kullanıcı İle Giriş Yap
+          </button>
 
           <form
             onSubmit={(e) => {

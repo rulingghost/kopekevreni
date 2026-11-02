@@ -9,7 +9,6 @@ import {
   UserCircleIcon,
   LockClosedIcon,
   EnvelopeIcon,
-  SparklesIcon,
   CheckBadgeIcon,
   ArrowRightIcon,
 } from "@heroicons/react/24/outline";
@@ -90,42 +89,18 @@ const PageLogin: FC = () => {
           </div>
         ) : (
           <>
-            {/* ÖRNEK TEST KULLANICISI KUTUSU */}
-            <div className="p-4 rounded-2xl bg-amber-50/90 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-900 dark:text-amber-300">
-                  <SparklesIcon className="w-4 h-4 text-[#dc5075]" />
-                  <span>Örnek Test Kullanıcısı (Hazır Giriş)</span>
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white">
-                  Demo Hesap
-                </span>
-              </div>
-
-              <div className="text-xs space-y-1 bg-white/80 dark:bg-neutral-900/70 p-2.5 rounded-xl border border-amber-200/60 dark:border-neutral-800 font-mono text-neutral-700 dark:text-neutral-300">
-                <div>
-                  <strong>E-posta:</strong> {SAMPLE_DEMO_USER.email}
-                </div>
-                <div>
-                  <strong>Şifre:</strong> 123456
-                </div>
-                <div>
-                  <strong>Kullanıcı:</strong> {SAMPLE_DEMO_USER.name} ({SAMPLE_DEMO_USER.city}/{SAMPLE_DEMO_USER.district})
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleQuickDemoLogin}
-                className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5"
-              >
-                <span>🚀 Örnek Kullanıcı İle Tek Tıkla Giriş Yap</span>
-                <ArrowRightIcon className="w-4 h-4" />
-              </button>
-            </div>
+            {/* SADECE TEK TIKLA ÖRNEK KULLANICI GİRİŞ BUTONU */}
+            <button
+              type="button"
+              onClick={handleQuickDemoLogin}
+              className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center justify-center gap-2"
+            >
+              <span>🚀 Tek Tıkla Örnek Kullanıcı İle Giriş Yap</span>
+              <ArrowRightIcon className="w-4 h-4" />
+            </button>
 
             {/* GİRİŞ FORMU */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 pt-2 border-t border-neutral-100 dark:border-neutral-800">
               {error && (
                 <div className="p-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-semibold border border-rose-200">
                   {error}
@@ -141,7 +116,7 @@ const PageLogin: FC = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="demo@kopekevreni.com"
+                    placeholder="E-posta adresiniz"
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-[#dc5075]"
                   />
                   <EnvelopeIcon className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -166,7 +141,7 @@ const PageLogin: FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-3 px-5 rounded-xl bg-[#dc5075] hover:bg-[#c23d60] text-white font-bold text-sm shadow-md shadow-[#dc5075]/20 transition-all"
+                className="w-full py-3 px-5 rounded-xl bg-[#dc5075] hover:bg-[#c23d60] text-white font-bold text-sm shadow-md shadow-[#dc5075]/25 transition-all"
               >
                 Giriş Yap
               </button>

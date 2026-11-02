@@ -43,7 +43,7 @@ const NAV: NavItem[] = [
     isSpecial: true,
   },
   {
-    name: "48 Cins",
+    name: "Cinsler",
     link: "/listing-car" as Route,
     icon: SparklesIcon,
   },
