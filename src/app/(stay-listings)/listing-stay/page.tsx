@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import React, { FC, useState, useMemo, useEffect } from "react";
 import PetCard from "@/components/PetCard";
+import { MobilePetCard } from "@/components/MobileCards";
 import PetListingFilter, { FilterState } from "@/components/PetListingFilter";
 import { MOCK_PET_LISTINGS } from "@/data/mockPets";
-import { VITRIN_LISTINGS, YENI_EKLENEN_ILANLAR } from "@/data/kopekDunyasiData";
+import { ALL_BREEDS, VITRIN_LISTINGS, YENI_EKLENEN_ILANLAR } from "@/data/kopekDunyasiData";
 import {
   getDistrictsOfCity,
   getLocationCoordinates,
@@ -12,9 +13,11 @@ import {
 } from "@/data/turkeyLocations";
 import { PetListing } from "@/types/pet";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { Route } from "@/routers/types";
-import { PlusCircleIcon, SparklesIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import {
+  SparklesIcon,
+  MapPinIcon,
+  AdjustmentsHorizontalIcon,
+} from "@heroicons/react/24/outline";
 
 const initialFilterState: FilterState = {
   listingType: "ALL",
@@ -53,12 +56,14 @@ const ListingStayPage: FC = () => {
     return "NEWEST";
   });
 
-  // İlanların Altındaki Harita Bilgisi İçin İl ve İlçe Seçimi
+  const [showMobileExtraFilters, setShowMobileExtraFilters] = useState(false);
+
   const [mapCity, setMapCity] = useState(urlCity || "Konya");
-  const [mapDistrict, setMapDistrict] = useState(urlCity && urlCity !== "Konya" ? "Merkez" : "Karatay");
+  const [mapDistrict, setMapDistrict] = useState(
+    urlCity && urlCity !== "Konya" ? "Merkez" : "Karatay"
+  );
   const currentMapDistricts = useMemo(() => getDistrictsOfCity(mapCity), [mapCity]);
 
-  // URL parametreleri değiştiğinde (Örn: Üst menüden Vitrin İlanları veya Yeni Eklenen İlanlar tıklandığında) state'i senkronize et
   useEffect(() => {
     setFilters((prev) => ({
       ...prev,
@@ -80,7 +85,6 @@ const ListingStayPage: FC = () => {
     }
   }, [urlType, urlBreed, urlCity, urlSort]);
 
-  // Tüm ilan havuzu (MOCK_PET_LISTINGS + Vitrin & Yeni Eklenen İlanlar böylece her ırktan ilan bulunur)
   const allCombinedListings: PetListing[] = useMemo(() => {
     const convertedVitrin: PetListing[] = VITRIN_LISTINGS.map((v) => {
       const coords = getLocationCoordinates(v.city, "Merkez");
@@ -193,19 +197,15 @@ const ListingStayPage: FC = () => {
     return [...MOCK_PET_LISTINGS, ...convertedVitrin, ...convertedYeni];
   }, []);
 
-  // Filtreleme Algoritması
   const filteredListings = useMemo(() => {
     return allCombinedListings
       .filter((pet) => {
-        // Vitrin modu seçiliyse öne çıkan vitrin ilanlarını filtrele
         if (sortBy === "VITRIN" && !pet.featured && !pet.id.startsWith("v-")) {
           return false;
         }
-        // 1. İlan Türü
         if (filters.listingType !== "ALL" && pet.listingType !== filters.listingType) {
           return false;
         }
-        // 2. Irk
         if (
           filters.breed &&
           !pet.breed.toLowerCase().includes(filters.breed.toLowerCase()) &&
@@ -213,11 +213,9 @@ const ListingStayPage: FC = () => {
         ) {
           return false;
         }
-        // 3. Şehir
         if (filters.city && !pet.location.city.toLowerCase().includes(filters.city.toLowerCase())) {
           return false;
         }
-        // 4. Arama sorgusu
         if (
           urlQuery &&
           !pet.title.toLowerCase().includes(urlQuery.toLowerCase()) &&
@@ -226,19 +224,15 @@ const ListingStayPage: FC = () => {
         ) {
           return false;
         }
-        // 5. Cinsiyet
         if (filters.gender !== "ALL" && pet.gender !== filters.gender) {
           return false;
         }
-        // 6. Yaş Grubu
         if (filters.ageGroup !== "ALL" && pet.ageGroup !== filters.ageGroup) {
           return false;
         }
-        // 7. Boyut
         if (filters.size !== "ALL" && pet.size !== filters.size) {
           return false;
         }
-        // 8. Sağlık Kriterleri
         if (filters.vaccinated && !pet.badges.vaccinated) return false;
         if (filters.microchipped && !pet.badges.microchipped) return false;
         if (filters.neutered && !pet.badges.neutered) return false;
@@ -278,23 +272,189 @@ const ListingStayPage: FC = () => {
   }, [filters.breed, sortBy, urlSort]);
 
   return (
-    <div className="min-h-screen py-4 sm:py-8 lg:py-12 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
-      <div className="max-w-[1720px] mx-auto px-2.5 sm:px-6 lg:px-8 xl:px-10">
-        {/* ÜST BAŞLIK VE KATEGORİ SEKMELERİ */}
-        <div className="pb-3 sm:pb-6 border-b border-[#EDE7DE] dark:border-neutral-800 mb-4 sm:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-3">
+    <div className="min-h-screen pb-16 md:py-10 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
+      {/* ===================================================================== */}
+      {/* 1. SIFIRDAN YAZILMIŞ MOBİL İLANLAR SAYFASI (< 768px)                   */}
+      {/* ===================================================================== */}
+      <div className="block md:hidden px-3 pt-3 space-y-3.5">
+        {/* Mobil Başlık ve İlan Sayısı */}
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-serif text-xl sm:text-5xl font-bold text-[#1C1917] dark:text-[#FAF8F5] tracking-tight">
+            <h1 className="font-serif text-lg font-extrabold text-[#1C1917] dark:text-[#FAF8F5]">
               {pageHeading}
             </h1>
-            <p className="text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E] mt-1 font-light">
+            <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
+              Toplam <strong>{filteredListings.length}</strong> aktif ilan listeleniyor
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowMobileExtraFilters(!showMobileExtraFilters)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1 border transition-colors ${
+              showMobileExtraFilters
+                ? "bg-[#dc5075] text-white border-[#dc5075]"
+                : "bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border-neutral-200 dark:border-neutral-700"
+            }`}
+          >
+            <AdjustmentsHorizontalIcon className="w-4 h-4" />
+            <span>Filtrele</span>
+          </button>
+        </div>
+
+        {/* Mobil Hızlı Sekmeler (Tümü / Vitrin / Yeni) */}
+        <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs font-bold">
+          <button
+            type="button"
+            onClick={() => {
+              setSortBy("NEWEST");
+              setFilters((p) => ({ ...p, listingType: "ALL" }));
+            }}
+            className={`py-2 rounded-lg transition-colors ${
+              sortBy === "NEWEST" && filters.listingType === "ALL"
+                ? "bg-[#dc5075] text-white"
+                : "text-neutral-600 dark:text-neutral-300"
+            }`}
+          >
+            ⚡ Tümü / Yeni
+          </button>
+          <button
+            type="button"
+            onClick={() => setSortBy("VITRIN")}
+            className={`py-2 rounded-lg transition-colors ${
+              sortBy === "VITRIN"
+                ? "bg-[#802859] text-white"
+                : "text-neutral-600 dark:text-neutral-300"
+            }`}
+          >
+            ✨ Vitrin
+          </button>
+          <button
+            type="button"
+            onClick={() => setSortBy("POPULAR")}
+            className={`py-2 rounded-lg transition-colors ${
+              sortBy === "POPULAR"
+                ? "bg-amber-600 text-white"
+                : "text-neutral-600 dark:text-neutral-300"
+            }`}
+          >
+            🔥 Popüler
+          </button>
+        </div>
+
+        {/* Mobil Hızlı Irk ve Şehir Seçimi (Her zaman el altında, 2 Sütun) */}
+        <div className="grid grid-cols-2 gap-2">
+          <select
+            value={filters.breed}
+            onChange={(e) => setFilters((p) => ({ ...p, breed: e.target.value }))}
+            className="w-full text-xs font-semibold bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 text-neutral-800 dark:text-neutral-100"
+          >
+            <option value="">Tüm Köpek Irkları</option>
+            {ALL_BREEDS.map((b) => (
+              <option key={b.slug} value={b.name}>
+                {b.name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={filters.city}
+            onChange={(e) => setFilters((p) => ({ ...p, city: e.target.value }))}
+            className="w-full text-xs font-semibold bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 text-neutral-800 dark:text-neutral-100"
+          >
+            <option value="">Tüm Şehirler (81)</option>
+            {TURKEY_CITIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Açılır/Kapanır Ekstra Mobil Filtre Kutusu */}
+        {showMobileExtraFilters && (
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700 space-y-2.5 shadow-md">
+            <div className="grid grid-cols-3 gap-1.5 text-xs font-bold">
+              {[
+                { label: "Tümü", val: "ALL" },
+                { label: "Erkek ♂", val: "MALE" },
+                { label: "Dişi ♀", val: "FEMALE" },
+              ].map((g) => (
+                <button
+                  key={g.val}
+                  type="button"
+                  onClick={() => setFilters((p) => ({ ...p, gender: g.val as any }))}
+                  className={`py-1.5 rounded-lg border ${
+                    filters.gender === g.val
+                      ? "bg-[#dc5075] text-white border-[#dc5075]"
+                      : "border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300"
+                  }`}
+                >
+                  {g.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between pt-1">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="text-xs font-bold text-rose-600"
+              >
+                Filtreleri Sıfırla
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowMobileExtraFilters(false)}
+                className="px-4 py-1.5 rounded-lg bg-[#dc5075] text-white text-xs font-bold"
+              >
+                Uygula ({filteredListings.length})
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Mobil 2 Sütunlu İlan Grid'i (MobilePetCard - Çakışmasız) */}
+        {filteredListings.length > 0 ? (
+          <div className="grid grid-cols-2 gap-2.5">
+            {filteredListings.map((pet) => (
+              <MobilePetCard key={pet.id} item={pet} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 text-center border border-neutral-200 dark:border-neutral-700 space-y-2.5">
+            <p className="text-xs font-semibold text-neutral-600 dark:text-neutral-300">
+              Seçtiğiniz kriterlere uygun ilan bulunamadı.
+            </p>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="px-4 py-2 rounded-xl bg-[#dc5075] text-white text-xs font-bold"
+            >
+              Filtreleri Temizle
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* ===================================================================== */}
+      {/* 2. MASAÜSTÜ İLANLAR SAYFASI (>= 768px - BİREBİR KORUNAN TASARIM)       */}
+      {/* ===================================================================== */}
+      <div className="hidden md:block max-w-[1720px] mx-auto px-6 lg:px-8 xl:px-10">
+        {/* ÜST BAŞLIK */}
+        <div className="pb-6 border-b border-[#EDE7DE] dark:border-neutral-800 mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h1 className="font-serif text-4xl lg:text-5xl font-bold text-[#1C1917] dark:text-[#FAF8F5] tracking-tight">
+              {pageHeading}
+            </h1>
+            <p className="text-sm text-[#78716C] dark:text-[#A8A29E] mt-2 font-light">
               Tüm güncel köpek ilanları, vitrin ilanları ve ırk bazlı filtreleme
             </p>
           </div>
         </div>
 
         {/* ANA İÇERİK: SOL FİLTRE & SAĞ GRİD */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3.5 sm:gap-8">
-          {/* SOL FİLTRE KOLONU */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <PetListingFilter
               filters={filters}
@@ -310,11 +470,9 @@ const ListingStayPage: FC = () => {
             />
           </div>
 
-          {/* SAĞ İLAN LİSTELEME KOLONU */}
           <div className="lg:col-span-3 space-y-6">
-            {/* SONUÇ SAYACI VE SIRALAMA */}
-            <div className="bg-white dark:bg-[#1E1C1A] border border-[#EDE7DE] dark:border-neutral-800 rounded-xl sm:rounded-2xl px-3 py-2.5 sm:px-5 sm:py-3.5 flex flex-row items-center justify-between gap-2 shadow-sm">
-              <div className="text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E]">
+            <div className="bg-white dark:bg-[#1E1C1A] border border-[#EDE7DE] dark:border-neutral-800 rounded-2xl px-5 py-3.5 flex items-center justify-between gap-3 shadow-sm">
+              <div className="text-sm text-[#78716C] dark:text-[#A8A29E]">
                 Toplam{" "}
                 <strong className="text-[#1C1917] dark:text-[#FAF8F5] font-serif text-base">
                   {filteredListings.length}
@@ -323,7 +481,9 @@ const ListingStayPage: FC = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs text-[#78716C] dark:text-[#A8A29E]">Görünüm & Sıralama:</span>
+                <span className="text-xs text-[#78716C] dark:text-[#A8A29E]">
+                  Görünüm & Sıralama:
+                </span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
@@ -336,15 +496,13 @@ const ListingStayPage: FC = () => {
               </div>
             </div>
 
-            {/* İLAN GRİDİ */}
             {filteredListings.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-2.5 sm:gap-5">
+              <div className="grid grid-cols-2 xl:grid-cols-3 gap-5">
                 {filteredListings.map((pet) => (
                   <PetCard key={pet.id} pet={pet} />
                 ))}
               </div>
             ) : (
-              /* BOŞ DURUM */
               <div className="text-center py-16 px-4 bg-white dark:bg-[#1E1C1A] border border-[#EDE7DE] dark:border-neutral-800 rounded-3xl space-y-4">
                 <div className="w-16 h-16 rounded-full bg-[#FAF8F5] dark:bg-neutral-800 flex items-center justify-center mx-auto text-[#7A1C30]">
                   <SparklesIcon className="w-8 h-8" />
@@ -352,7 +510,7 @@ const ListingStayPage: FC = () => {
                 <h3 className="font-serif font-bold text-xl text-[#1C1917] dark:text-[#FAF8F5]">
                   Arama Kriterlerinize Uygun Can Bulunamadı
                 </h3>
-                <p className="text-xs sm:text-sm text-[#78716C] dark:text-[#A8A29E] max-w-md mx-auto">
+                <p className="text-sm text-[#78716C] dark:text-[#A8A29E] max-w-md mx-auto">
                   Seçtiğiniz filtreleri genişleterek veya sıfırlayarak diğer köpek ilanlarımızı inceleyebilirsiniz.
                 </p>
                 <button
@@ -365,7 +523,6 @@ const ListingStayPage: FC = () => {
               </div>
             )}
 
-            {/* İLANLARIN ALTINDA HIZLI HARİTA KONUM BİLGİSİ */}
             <div className="bg-white dark:bg-[#1E1C1A] border border-[#EDE7DE] dark:border-neutral-800 rounded-3xl p-5 shadow-sm mt-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
@@ -373,8 +530,11 @@ const ListingStayPage: FC = () => {
                     <MapPinIcon className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm sm:text-base text-neutral-900 dark:text-neutral-100">
-                      İlanların İl & İlçe Harita Bilgisi: <span className="text-[#dc5075]">{mapCity} / {mapDistrict} Merkez</span>
+                    <h3 className="font-bold text-base text-neutral-900 dark:text-neutral-100">
+                      İlanların İl & İlçe Harita Bilgisi:{" "}
+                      <span className="text-[#dc5075]">
+                        {mapCity} / {mapDistrict} Merkez
+                      </span>
                     </h3>
                     <p className="text-xs text-neutral-500 dark:text-neutral-400">
                       Her ilan kartının altında il/ilçe konumu ve ilan detay sayfasında tam harita bilgisi yer alır.

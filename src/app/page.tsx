@@ -13,6 +13,7 @@ import {
 } from "@/data/kopekDunyasiData";
 import VitrinCard from "@/components/VitrinCard";
 import GuncelListCard from "@/components/GuncelListCard";
+import { MobileVitrinCard, MobileGuncelRowCard } from "@/components/MobileCards";
 import { getDistrictsOfCity, CITIES_LIST as TURKEY_CITIES } from "@/data/turkeyLocations";
 import {
   MagnifyingGlassIcon,
@@ -26,6 +27,9 @@ import {
 export default function HomePage() {
   // Sol Menü Sekmesi: 1 = Tür/Irk Kategorisi, 2 = Şehir Kategorisi
   const [sidebarTab, setSidebarTab] = useState<1 | 2>(1);
+
+  // Mobil Güncel Liste Sekmesi: "yeni" | "vitrin"
+  const [mobileListTab, setMobileListTab] = useState<"yeni" | "vitrin">("yeni");
 
   // Arama ve Filtreleme Durumları
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,7 +61,6 @@ export default function HomePage() {
   // Vitrin İlanları Filtreleme
   const filteredVitrin = useMemo(() => {
     return VITRIN_LISTINGS.filter((item) => {
-      // Irk filtresi
       if (selectedBreed !== "TÜMÜ") {
         if (
           item.breed !== selectedBreed &&
@@ -66,13 +69,11 @@ export default function HomePage() {
           return false;
         }
       }
-      // Şehir filtresi
       if (selectedCity !== "TÜMÜ") {
         if (item.city !== selectedCity) {
           return false;
         }
       }
-      // Arama kelimesi
       if (searchTerm.trim()) {
         const q = searchTerm.toLowerCase();
         const matchesTitle = item.title.toLowerCase().includes(q);
@@ -84,7 +85,6 @@ export default function HomePage() {
     });
   }, [selectedBreed, selectedCity, searchTerm]);
 
-  // Filtreleri Sıfırlama
   const resetFilters = () => {
     setSelectedBreed("TÜMÜ");
     setSelectedCity("TÜMÜ");
@@ -92,30 +92,392 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] dark:bg-[#151312] text-[#1C1917] dark:text-[#E8E4DF] transition-colors pb-12">
-      {/* ANA GÖVDE: SOLDA CİNS LİSTESİ SIDEBAR, SAĞDA VİTRİN & LİSTELER */}
-      <div className="max-w-[1720px] mx-auto px-2.5 sm:px-6 lg:px-8 xl:px-10 pt-3 sm:pt-4">
-        <div className="flex flex-col lg:flex-row gap-3.5 sm:gap-5 items-start">
-          
-          {/* ========================================================= */}
-          {/* SOL KOLON: TÜM KÖPEK IRKLARI & ŞEHİRLER (SAYILARLA BİREBİR) */}
-          {/* ========================================================= */}
+    <main className="min-h-screen bg-[#FAF8F5] dark:bg-[#151312] text-[#1C1917] dark:text-[#E8E4DF] transition-colors pb-16 md:pb-12">
+      {/* ===================================================================== */}
+      {/* 1. SIFIRDAN YAZILMIŞ MOBİL ANA SAYFA DENEYİMİ (< 768px)                */}
+      {/* ===================================================================== */}
+      <div className="block md:hidden px-3 pt-3 space-y-4">
+        {/* A) MOBİL HIZLI ARAMA & FİLTRE KARTI */}
+        <div className="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700 shadow-2xs space-y-2.5">
+          <div className="relative">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Irk, şehir veya ilan başlığı ara..."
+              className="w-full text-xs bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl pl-8 pr-8 py-2.5 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
+            />
+            <MagnifyingGlassIcon className="w-4 h-4 text-neutral-400 absolute left-2.5 top-2.5" />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm("")}
+                className="absolute right-2.5 top-2.5 text-neutral-400"
+              >
+                <XMarkIcon className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <select
+              value={selectedBreed}
+              onChange={(e) => setSelectedBreed(e.target.value)}
+              className="w-full text-xs font-semibold bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
+            >
+              <option value="TÜMÜ">Tüm Cinsler (48)</option>
+              {ALL_BREEDS.map((b) => (
+                <option key={b.slug} value={b.name}>
+                  {b.name} ({b.count})
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              className="w-full text-xs font-semibold bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
+            >
+              <option value="TÜMÜ">Tüm Şehirler (81)</option>
+              {CITIES_LIST.map((c) => (
+                <option key={c.slug} value={c.name}>
+                  {c.name} ({c.count})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {(selectedBreed !== "TÜMÜ" || selectedCity !== "TÜMÜ" || searchTerm) && (
+            <div className="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-700 text-[11px]">
+              <span className="font-semibold text-neutral-600 dark:text-neutral-300 truncate pr-2">
+                Filtre: {selectedBreed !== "TÜMÜ" ? selectedBreed : "Tüm Irklar"}{" "}
+                {selectedCity !== "TÜMÜ" ? `• ${selectedCity}` : ""}
+              </span>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="text-rose-600 font-extrabold shrink-0"
+              >
+                Temizle ✕
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* B) MOBİL 48 KÖPEK CİNSİ & 81 ŞEHİR LİSTESİ (Tam Genişlikli Tek Sütun - Çakışmasız) */}
+        <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-2xs">
+          <div className="grid grid-cols-2 text-xs font-extrabold border-b border-neutral-200 dark:border-neutral-700">
+            <button
+              type="button"
+              onClick={() => {
+                setSidebarTab(1);
+                setSidebarSearch("");
+              }}
+              className={`py-2.5 text-center transition-colors ${
+                sidebarTab === 1
+                  ? "bg-[#dc5075] text-white"
+                  : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300"
+              }`}
+            >
+              🐕 Köpek Cinsleri (48)
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSidebarTab(2);
+                setSidebarSearch("");
+              }}
+              className={`py-2.5 text-center transition-colors ${
+                sidebarTab === 2
+                  ? "bg-[#802859] text-white"
+                  : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300"
+              }`}
+            >
+              📍 Şehirler (81)
+            </button>
+          </div>
+
+          <div className="p-2 border-b border-neutral-100 dark:border-neutral-700/60 bg-neutral-50 dark:bg-neutral-900/50">
+            <div className="relative">
+              <input
+                type="text"
+                value={sidebarSearch}
+                onChange={(e) => setSidebarSearch(e.target.value)}
+                placeholder={
+                  sidebarTab === 1 ? "48 köpek ırkı içinde ara..." : "81 şehir içinde ara..."
+                }
+                className="w-full text-xs bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg pl-7 pr-6 py-1.5 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-[#dc5075]"
+              />
+              <MagnifyingGlassIcon className="w-3.5 h-3.5 text-neutral-400 absolute left-2 top-2" />
+              {sidebarSearch && (
+                <button
+                  type="button"
+                  onClick={() => setSidebarSearch("")}
+                  className="absolute right-2 top-2 text-neutral-400"
+                >
+                  <XMarkIcon className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          <ul className="max-h-[195px] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-700/50 text-xs">
+            {sidebarTab === 1
+              ? filteredBreeds.map((breed) => {
+                  const active = selectedBreed === breed.name;
+                  return (
+                    <li key={breed.slug}>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSelectedBreed(active ? "TÜMÜ" : breed.name)
+                        }
+                        className={`w-full px-3 py-2 flex items-center justify-between gap-2 text-left transition-colors ${
+                          active
+                            ? "bg-[#dc5075]/10 text-[#dc5075] font-bold"
+                            : "text-neutral-800 dark:text-neutral-200"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2.5 min-w-0">
+                          <img
+                            src={`/images/breeds/${breed.slug}.png`}
+                            alt={breed.name}
+                            className="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-[#dc5075]/40"
+                            loading="lazy"
+                          />
+                          <span className="truncate font-semibold">{breed.name}</span>
+                        </span>
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 shrink-0">
+                          {breed.count} İlan
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })
+              : filteredCities.map((city) => {
+                  const active = selectedCity === city.name;
+                  return (
+                    <li key={city.slug}>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSelectedCity(active ? "TÜMÜ" : city.name)
+                        }
+                        className={`w-full px-3 py-2 flex items-center justify-between gap-2 text-left transition-colors ${
+                          active
+                            ? "bg-[#802859]/10 text-[#802859] dark:text-[#f26ba8] font-bold"
+                            : "text-neutral-800 dark:text-neutral-200"
+                        }`}
+                      >
+                        <span className="truncate font-semibold">📍 {city.name}</span>
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 shrink-0">
+                          {city.count} İlan
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+          </ul>
+        </div>
+
+        {/* C) MOBİL ÖNE ÇIKAN ÜRETİCİLER & KULÜPLER (Yatay Kaydırmalı Hikaye Şeridi) */}
+        <div className="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700 shadow-2xs">
+          <div className="flex items-center justify-between mb-2.5">
+            <span className="text-xs font-extrabold text-[#dc5075]">
+              🏆 Öne Çıkan Üreticiler & Kulüpler
+            </span>
+            <Link
+              href={"/uyeler" as Route}
+              className="text-[11px] font-bold text-neutral-500 dark:text-neutral-400"
+            >
+              Tümü →
+            </Link>
+          </div>
+          <div className="flex items-center gap-3 overflow-x-auto pb-1">
+            {FEATURED_BREEDERS.map((breeder) => (
+              <Link
+                key={breeder.id}
+                href={breeder.href as Route}
+                className="flex flex-col items-center shrink-0 w-16 text-center"
+              >
+                <div className="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-[#dc5075] to-amber-500">
+                  <img
+                    src={breeder.image}
+                    alt={breeder.name}
+                    className="w-full h-full rounded-full object-cover border-2 border-white dark:border-neutral-900"
+                    loading="lazy"
+                  />
+                </div>
+                <span className="mt-1 text-[10px] font-bold text-neutral-800 dark:text-neutral-200 truncate w-full">
+                  {breeder.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* D) MOBİL VİTRİN İLANLARI (2 Sütunlu Sıfırdan Mobil Kartlar) */}
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between px-0.5">
+            <h2 className="text-sm font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">
+              <SparklesIcon className="w-4 h-4 text-[#dc5075]" />
+              <span>Vitrin İlanları ({filteredVitrin.length})</span>
+            </h2>
+            <Link
+              href={"/listing-stay" as Route}
+              className="text-xs font-extrabold text-[#dc5075]"
+            >
+              Tümünü Gör →
+            </Link>
+          </div>
+
+          {filteredVitrin.length > 0 ? (
+            <div className="grid grid-cols-2 gap-2.5">
+              {filteredVitrin.map((item) => (
+                <MobileVitrinCard key={item.id} item={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 text-center border border-neutral-200 dark:border-neutral-700 space-y-2">
+              <p className="text-xs text-neutral-500">
+                Aradığınız filtreye uygun vitrin ilanı bulunamadı.
+              </p>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="px-4 py-1.5 rounded-lg bg-[#dc5075] text-white text-xs font-bold"
+              >
+                Tüm İlanları Göster
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* E) MOBİL YENİ EKLENEN & GÜNÜN VİTRİN İLANLARI (Sekmeli Yatay Kartlar) */}
+        <div className="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700 shadow-2xs space-y-3">
+          <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-neutral-100 dark:bg-neutral-900 text-xs font-extrabold">
+            <button
+              type="button"
+              onClick={() => setMobileListTab("yeni")}
+              className={`py-2 rounded-lg transition-all ${
+                mobileListTab === "yeni"
+                  ? "bg-[#dc5075] text-white shadow-xs"
+                  : "text-neutral-600 dark:text-neutral-400"
+              }`}
+            >
+              ⚡ Yeni Eklenenler
+            </button>
+            <button
+              type="button"
+              onClick={() => setMobileListTab("vitrin")}
+              className={`py-2 rounded-lg transition-all ${
+                mobileListTab === "vitrin"
+                  ? "bg-emerald-600 text-white shadow-xs"
+                  : "text-neutral-600 dark:text-neutral-400"
+              }`}
+            >
+              ⭐ Günün Vitrini
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            {(mobileListTab === "yeni"
+              ? YENI_EKLENEN_ILANLAR
+              : GUNUN_VITRIN_ILANLARI
+            ).map((item) => (
+              <MobileGuncelRowCard
+                key={item.id}
+                item={item}
+                accent={mobileListTab === "yeni" ? "pink" : "green"}
+              />
+            ))}
+          </div>
+
+          <Link
+            href={"/listing-stay" as Route}
+            className="block w-full py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 text-center text-xs font-extrabold text-neutral-800 dark:text-neutral-200"
+          >
+            Tüm Güncel İlanları Gör →
+          </Link>
+        </div>
+
+        {/* F) MOBİL KONUM HARİTASI KARTI */}
+        <div className="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700 shadow-2xs space-y-2.5">
+          <div className="flex items-center gap-1.5">
+            <MapPinIcon className="w-4 h-4 text-[#dc5075] shrink-0" />
+            <h3 className="text-xs font-extrabold text-neutral-900 dark:text-white">
+              Konuma Göre İlan Haritası ({mapCity} / {mapDistrict})
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <select
+              value={mapCity}
+              onChange={(e) => {
+                const newCity = e.target.value;
+                setMapCity(newCity);
+                const dList = getDistrictsOfCity(newCity);
+                setMapDistrict(dList[0] || "Merkez");
+              }}
+              className="w-full text-xs font-semibold rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-2 text-neutral-800 dark:text-neutral-100"
+            >
+              {TURKEY_CITIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={mapDistrict}
+              onChange={(e) => setMapDistrict(e.target.value)}
+              className="w-full text-xs font-semibold rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-2 text-neutral-800 dark:text-neutral-100"
+            >
+              {currentMapDistricts.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="w-full h-[200px] rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700">
+            <iframe
+              title={`Köpek Evreni Harita - ${mapCity} ${mapDistrict}`}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                mapCity + " " + mapDistrict + ", Türkiye"
+              )}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ===================================================================== */}
+      {/* 2. MASAÜSTÜ ANA SAYFA DENEYİMİ (>= 768px - BİREBİR KORUNAN TASARIM)    */}
+      {/* ===================================================================== */}
+      <div className="hidden md:block max-w-[1720px] mx-auto px-6 lg:px-8 xl:px-10 pt-4">
+        <div className="flex flex-col lg:flex-row gap-5 items-start">
+          {/* SOL KOLON: TÜM KÖPEK IRKLARI & ŞEHİRLER */}
           <aside className="w-full lg:w-[320px] xl:w-[350px] shrink-0 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 shadow-2xs overflow-hidden">
-            {/* SEKMELER: TÜR KATEGORİSİ / ŞEHİR KATEGORİSİ */}
-            <div className="grid grid-cols-2 text-center text-[11px] sm:text-xs font-bold border-b border-neutral-200 dark:border-neutral-700">
+            <div className="grid grid-cols-2 text-center text-xs font-bold border-b border-neutral-200 dark:border-neutral-700">
               <button
                 type="button"
                 onClick={() => {
                   setSidebarTab(1);
                   setSidebarSearch("");
                 }}
-                className={`py-2 sm:py-2.5 px-2 transition-colors ${
+                className={`py-3 px-2 transition-colors ${
                   sidebarTab === 1
                     ? "bg-[#dc5075] text-white"
-                    : "bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200"
+                    : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200"
                 }`}
               >
-                Tür Kategorisi (48 Irk)
+                Tür Kategorisi ({ALL_BREEDS.length})
               </button>
               <button
                 type="button"
@@ -123,31 +485,33 @@ export default function HomePage() {
                   setSidebarTab(2);
                   setSidebarSearch("");
                 }}
-                className={`py-2 sm:py-2.5 px-2 transition-colors ${
+                className={`py-3 px-2 transition-colors ${
                   sidebarTab === 2
-                    ? "bg-[#18b418] text-white"
-                    : "bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200"
+                    ? "bg-[#802859] text-white"
+                    : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200"
                 }`}
               >
-                Şehir Kategorisi
+                Şehir Kategorisi ({CITIES_LIST.length})
               </button>
             </div>
 
-            {/* HIZLI FİLTRELEME ARAMA KUTUSU */}
-            <div className="p-1.5 sm:p-2 border-b border-neutral-100 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50">
+            <div className="p-2 border-b border-neutral-100 dark:border-neutral-700/60 bg-neutral-50 dark:bg-neutral-900/50">
               <div className="relative">
                 <input
                   type="text"
-                  placeholder={
-                    sidebarTab === 1 ? "Irk / cins ara..." : "Şehir ara..."
-                  }
                   value={sidebarSearch}
                   onChange={(e) => setSidebarSearch(e.target.value)}
-                  className="w-full text-[11px] sm:text-xs py-1.5 pl-7 pr-6 rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
+                  placeholder={
+                    sidebarTab === 1
+                      ? "Köpek cinsi filtrele..."
+                      : "Şehir filtrele..."
+                  }
+                  className="w-full text-xs bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded px-2.5 py-1.5 pl-7 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-[#dc5075]"
                 />
-                <MagnifyingGlassIcon className="w-3.5 h-3.5 absolute left-2 top-2 text-neutral-400" />
+                <MagnifyingGlassIcon className="w-3.5 h-3.5 text-neutral-400 absolute left-2 top-2" />
                 {sidebarSearch && (
                   <button
+                    type="button"
                     onClick={() => setSidebarSearch("")}
                     className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600"
                   >
@@ -157,191 +521,227 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* SEÇİLEN FİLTRE AKTİF İSE BİLGİ */}
-            {(selectedBreed !== "TÜMÜ" || selectedCity !== "TÜMÜ") && (
-              <div className="p-2 bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-800 flex items-center justify-between text-[11px]">
-                <span className="font-semibold text-amber-800 dark:text-amber-200 truncate">
-                  Filtre: {selectedBreed !== "TÜMÜ" ? selectedBreed : selectedCity}
-                </span>
-                <button
-                  onClick={resetFilters}
-                  className="text-rose-600 dark:text-rose-400 font-bold hover:underline shrink-0"
-                >
-                  Sıfırla
-                </button>
-              </div>
-            )}
-
-            {/* LİSTE ALANI (Mobilde kompakt 2 sütun ve orantılı yükseklik, masaüstünde 1 sütun) */}
-            <div className="max-h-[185px] sm:max-h-[260px] lg:max-h-[950px] overflow-y-auto custom-scrollbar grid grid-cols-2 lg:grid-cols-1 gap-px bg-neutral-100 dark:bg-neutral-700/60 text-xs">
-              {sidebarTab === 1 ? (
-                // 1. TÜR LİSTESİ
-                filteredBreeds.length > 0 ? (
-                  filteredBreeds.map((breed) => {
-                    const isSelected = selectedBreed === breed.name;
-                    return (
+            {sidebarTab === 1 && (
+              <ul className="max-h-[950px] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-700/50 text-xs">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBreed("TÜMÜ")}
+                    className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-rose-50/60 dark:hover:bg-neutral-700/50 transition-colors ${
+                      selectedBreed === "TÜMÜ"
+                        ? "bg-rose-50 dark:bg-neutral-700 font-bold text-[#dc5075]"
+                        : "text-neutral-700 dark:text-neutral-200 font-medium"
+                    }`}
+                  >
+                    <span className="flex items-center gap-3">
+                      <span className="w-10 h-10 rounded-full bg-[#dc5075]/10 text-[#dc5075] flex items-center justify-center text-base font-bold shrink-0 ring-2 ring-[#dc5075]/30">
+                        🐾
+                      </span>
+                      <span className="text-[13px]">Tüm Köpek Cinsleri</span>
+                    </span>
+                    <span className="text-[11px] bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full px-2 py-0.5 font-bold">
+                      1.120+
+                    </span>
+                  </button>
+                </li>
+                {filteredBreeds.map((breed) => {
+                  const isActive = selectedBreed === breed.name;
+                  return (
+                    <li key={breed.slug}>
                       <button
-                        key={breed.slug}
                         type="button"
-                        onClick={() => {
-                          setSelectedBreed(isSelected ? "TÜMÜ" : breed.name);
-                        }}
-                        className={`w-full flex items-center justify-between px-2 py-1.5 lg:px-3 lg:py-2.5 text-left transition-colors group ${
-                          isSelected
-                            ? "bg-rose-50 dark:bg-rose-950/40 text-[#dc5075] font-bold"
-                            : "bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700/80 text-neutral-800 dark:text-neutral-200"
+                        onClick={() => setSelectedBreed(breed.name)}
+                        className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-rose-50/60 dark:hover:bg-neutral-700/50 transition-colors ${
+                          isActive
+                            ? "bg-rose-50 dark:bg-neutral-700 font-bold text-[#dc5075]"
+                            : "text-neutral-700 dark:text-neutral-300"
                         }`}
                       >
-                        <div className="flex items-center gap-1.5 sm:gap-2.5 lg:gap-3 min-w-0 pr-1">
-                          <div className={`w-7 h-7 sm:w-9 sm:h-9 lg:w-14 lg:h-14 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 shrink-0 ring-1 lg:ring-2 ${
-                            isSelected ? "ring-[#dc5075]" : "ring-neutral-200 dark:ring-neutral-600 group-hover:ring-[#dc5075]"
-                          } shadow-xs flex items-center justify-center`}>
+                        <span className="flex items-center gap-3 truncate pr-2">
+                          <div className="w-10 h-10 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-700 shrink-0 ring-2 ring-neutral-200 dark:ring-neutral-600 shadow-xs">
                             <img
-                              src={breed.image || `/images/breeds/${breed.slug}.png`}
+                              src={`/images/breeds/${breed.slug}.png`}
                               alt={breed.name}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                              className="w-full h-full object-cover"
                               loading="lazy"
                             />
                           </div>
-                          <span className="truncate font-bold text-[10px] sm:text-xs lg:text-sm">{breed.name}</span>
-                        </div>
+                          <span className="truncate text-[13px] font-medium">{breed.name}</span>
+                        </span>
                         <span
-                          className={`shrink-0 text-[9px] lg:text-xs font-bold px-1.5 lg:px-2.5 py-0.5 rounded-full ${
-                            isSelected
+                          className={`text-[11px] rounded-full px-2 py-0.5 font-semibold shrink-0 ${
+                            isActive
                               ? "bg-[#dc5075] text-white"
-                              : "bg-amber-500 text-white"
+                              : "bg-neutral-100 dark:bg-neutral-700/80 text-neutral-500 dark:text-neutral-400"
                           }`}
                         >
-                          {breed.count}
+                          ({breed.count})
                         </span>
                       </button>
-                    );
-                  })
-                ) : (
-                  <div className="col-span-2 lg:col-span-1 p-4 text-center text-xs text-neutral-400 bg-white dark:bg-neutral-800">
-                    Sonuç bulunamadı.
-                  </div>
-                )
-              ) : (
-                // 2. ŞEHİR LİSTESİ
-                filteredCities.length > 0 ? (
-                  filteredCities.map((city) => {
-                    const isSelected = selectedCity === city.name;
-                    return (
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
+            {sidebarTab === 2 && (
+              <ul className="max-h-[950px] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-700/50 text-xs">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCity("TÜMÜ")}
+                    className={`w-full text-left px-3.5 py-2 flex items-center justify-between hover:bg-purple-50/60 dark:hover:bg-neutral-700/50 transition-colors ${
+                      selectedCity === "TÜMÜ"
+                        ? "bg-purple-50 dark:bg-neutral-700 font-bold text-[#802859] dark:text-[#f26ba8]"
+                        : "text-neutral-700 dark:text-neutral-200 font-medium"
+                    }`}
+                  >
+                    <span>Tüm Şehirler (Türkiye)</span>
+                    <span className="text-[11px] bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full px-2 py-0.5 font-bold">
+                      81 İl
+                    </span>
+                  </button>
+                </li>
+                {filteredCities.map((city) => {
+                  const isActive = selectedCity === city.name;
+                  return (
+                    <li key={city.slug}>
                       <button
-                        key={city.slug}
                         type="button"
-                        onClick={() => {
-                          setSelectedCity(isSelected ? "TÜMÜ" : city.name);
-                        }}
-                        className={`w-full flex items-center justify-between px-2.5 py-1.5 lg:px-3 lg:py-2 text-left transition-colors ${
-                          isSelected
-                            ? "bg-emerald-50 dark:bg-emerald-950/40 text-[#18b418] font-bold"
-                            : "bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700/80 text-neutral-800 dark:text-neutral-200"
+                        onClick={() => setSelectedCity(city.name)}
+                        className={`w-full text-left px-3.5 py-2 flex items-center justify-between hover:bg-purple-50/60 dark:hover:bg-neutral-700/50 transition-colors ${
+                          isActive
+                            ? "bg-purple-50 dark:bg-neutral-700 font-bold text-[#802859] dark:text-[#f26ba8]"
+                            : "text-neutral-700 dark:text-neutral-300"
                         }`}
                       >
-                        <span className="truncate pr-1 text-[11px] lg:text-xs">{city.name}</span>
+                        <span className="truncate pr-2">{city.name} Köpek İlanları</span>
                         <span
-                          className={`shrink-0 text-[9px] lg:text-[11px] font-bold px-1.5 lg:px-2 py-0.5 rounded-full bg-[#18b418] text-white`}
+                          className={`text-[11px] rounded-full px-2 py-0.5 font-semibold ${
+                            isActive
+                              ? "bg-[#802859] text-white"
+                              : "bg-neutral-100 dark:bg-neutral-700/80 text-neutral-500 dark:text-neutral-400"
+                          }`}
                         >
-                          {city.count}
+                          ({city.count})
                         </span>
                       </button>
-                    );
-                  })
-                ) : (
-                  <div className="col-span-2 lg:col-span-1 p-4 text-center text-xs text-neutral-400 bg-white dark:bg-neutral-800">
-                    Sonuç bulunamadı.
-                  </div>
-                )
-              )}
-            </div>
-
-            {/* GÜVENLİ PLATFORM BİLGİSİ */}
-            <div className="hidden lg:block p-3 bg-neutral-50 dark:bg-neutral-800/80 border-t border-neutral-200 dark:border-neutral-700 text-[11px] text-neutral-600 dark:text-neutral-400 space-y-1">
-              <div className="flex items-center gap-1.5 font-bold text-neutral-900 dark:text-neutral-100">
-                <ShieldCheckIcon className="w-4 h-4 text-[#18b418]" />
-                <span>Güvenli İlan Platformu</span>
-              </div>
-              <p className="leading-tight text-[10px]">
-                Köpek sahipleri ile köpek arayanların doğrudan buluştuğu ilan ve ırk portalı.
-              </p>
-            </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </aside>
 
-          {/* ========================================================= */}
-          {/* SAĞ ANA ALAN: HİKAYE ÇİFTLİKLERİ, VİTRİN VE GÜNCEL LİSTELER */}
-          {/* ========================================================= */}
-          <div className="w-full flex-1 min-w-0 space-y-3.5 sm:space-y-5">
-            
-            {/* 1. ÖNE ÇIKAN ÇİFTLİKLER / KURUMSAL FİRMALAR (DAİRESEL ROZETLER) */}
-            <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-2 sm:p-3 shadow-2xs">
-              <div className="flex items-center justify-between gap-3 sm:gap-6 overflow-x-auto no-scrollbar pb-0.5">
+          {/* SAĞ ANA İÇERİK KOLONU */}
+          <div className="flex-1 min-w-0 space-y-6 w-full">
+            {/* 2.1 ÖNE ÇIKAN ÜRETİCİLER & KULÜPLER */}
+            <div className="bg-white dark:bg-neutral-800 rounded-lg border-2 border-dashed border-[#eb567c]/70 p-3 shadow-2xs">
+              <div className="flex items-center justify-between mb-2 px-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#dc5075] flex items-center gap-1">
+                  <SparklesIcon className="w-3.5 h-3.5" />
+                  Öne Çıkan Köpek Çiftlikleri, Üreticiler & Irk Kulüpleri
+                </span>
+                <Link
+                  href={"/uyeler" as Route}
+                  className="text-[11px] font-semibold text-neutral-500 hover:text-[#dc5075] transition-colors"
+                >
+                  Tüm Üyeleri Gör →
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 pt-1">
                 {FEATURED_BREEDERS.map((breeder) => (
                   <Link
                     key={breeder.id}
-                    href={"/uyeler" as Route}
-                    className="flex flex-col items-center shrink-0 cursor-pointer group text-center"
+                    href={breeder.href as Route}
+                    className="group flex flex-col items-center text-center p-1.5 rounded-lg hover:bg-rose-50/50 dark:hover:bg-neutral-700/40 transition-all"
                   >
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full p-0.5 bg-gradient-to-tr from-[#dc5075] via-amber-400 to-[#802859] group-hover:scale-105 transition-transform">
-                      <div className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-neutral-900 p-0.5">
-                        <img
-                          src={breeder.image}
-                          alt={breeder.name}
-                          className="w-full h-full object-cover rounded-full"
-                        />
-                      </div>
+                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#dc5075] p-0.5 bg-white shadow-xs group-hover:scale-105 transition-transform">
+                      <img
+                        src={breeder.image}
+                        alt={breeder.name}
+                        className="w-full h-full object-cover rounded-full"
+                        loading="lazy"
+                      />
                     </div>
-                    <span className="text-[10px] sm:text-[11px] font-bold text-neutral-800 dark:text-neutral-200 mt-1 group-hover:text-[#dc5075] transition-colors truncate max-w-[85px] sm:max-w-[110px]">
+                    <span className="mt-1.5 text-[11px] font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-[#dc5075] line-clamp-1">
                       {breeder.name}
                     </span>
-                    <span className="text-[8px] sm:text-[9px] text-neutral-500 dark:text-neutral-400">
-                      {breeder.location}
+                    <span className="text-[9px] text-neutral-400 dark:text-neutral-500 line-clamp-1">
+                      {breeder.subtitle}
                     </span>
                   </Link>
                 ))}
               </div>
             </div>
 
-            {/* 2. VİTRİN İLANLARI (5'Lİ GRİD - FOTOĞRAFLI KÖPEK KARTLARI) */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between pb-1">
-                <div className="flex items-center gap-2">
-                  <SparklesIcon className="w-4 h-4 text-amber-500" />
-                  <h2 className="font-bold text-sm sm:text-base text-neutral-900 dark:text-neutral-100 tracking-tight">
-                    VİTRİN İLANLARI
-                  </h2>
-                  <span className="text-xs text-neutral-500 font-normal">
-                    ({filteredVitrin.length} Can Listeleniyor)
-                  </span>
+            {/* 2.2 VİTRİN İLANLARI BAŞLIK & FİLTRE DURUMU */}
+            <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 shadow-2xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-neutral-200 dark:border-neutral-700">
+                <div>
+                  <h1 className="text-lg sm:text-xl font-extrabold text-[#494949] dark:text-white tracking-tight flex items-center gap-2">
+                    <span>Köpek İlanları - Vitrin</span>
+                    {(selectedBreed !== "TÜMÜ" || selectedCity !== "TÜMÜ") && (
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#dc5075]/10 text-[#dc5075]">
+                        {selectedBreed !== "TÜMÜ" ? selectedBreed : ""}{" "}
+                        {selectedCity !== "TÜMÜ" ? `• ${selectedCity}` : ""}
+                      </span>
+                    )}
+                  </h1>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                    Köpekleri olanlar ile köpek arayanları buluşturan güncel vitrin ilanları
+                  </p>
                 </div>
 
-                {/* Filtre aktif ise temizle */}
-                {(selectedBreed !== "TÜMÜ" || selectedCity !== "TÜMÜ") && (
-                  <button
-                    onClick={resetFilters}
-                    className="text-xs text-rose-600 dark:text-rose-400 font-bold hover:underline"
+                <div className="flex items-center gap-2 flex-wrap">
+                  {(selectedBreed !== "TÜMÜ" || selectedCity !== "TÜMÜ" || searchTerm) && (
+                    <button
+                      type="button"
+                      onClick={resetFilters}
+                      className="px-3 py-1.5 rounded text-xs font-bold bg-rose-100 text-rose-700 hover:bg-rose-200 transition-colors flex items-center gap-1"
+                    >
+                      <XMarkIcon className="w-3.5 h-3.5" />
+                      <span>Filtreyi Temizle</span>
+                    </button>
+                  )}
+
+                  <Link
+                    href={"/listing-stay" as Route}
+                    className="px-3 py-1.5 rounded text-xs font-bold bg-[#802859] text-white hover:bg-[#691f48] transition-colors"
                   >
-                    Filtreleri Temizle ({selectedBreed !== "TÜMÜ" ? selectedBreed : ""}{selectedCity !== "TÜMÜ" ? ` - ${selectedCity}` : ""})
-                  </button>
-                )}
+                    Vitrin İlanları ({filteredVitrin.length})
+                  </Link>
+                  <Link
+                    href={"/listing-stay?sort=newest" as Route}
+                    className="px-3 py-1.5 rounded text-xs font-bold bg-[#dc5075] text-white hover:bg-[#c43d62] transition-colors"
+                  >
+                    Güncel İlanlar
+                  </Link>
+                  <Link
+                    href={"/add-listing/1" as Route}
+                    className="px-3 py-1.5 rounded text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                  >
+                    + Ücretsiz İlan Ver
+                  </Link>
+                </div>
               </div>
 
-              {/* 5-6 SÜTUNLU KART GRİDİ (Mobilde 2 eşit kompakt sütun) */}
               {filteredVitrin.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-3.5">
+                <div className="grid grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3.5">
                   {filteredVitrin.map((item) => (
                     <VitrinCard key={item.id} item={item} />
                   ))}
                 </div>
               ) : (
-                <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-8 text-center space-y-2">
-                  <p className="text-neutral-500 dark:text-neutral-400 text-sm">
-                    Seçilen kriterlere uygun vitrin ilanı bulunamadı.
+                <div className="py-12 text-center space-y-3">
+                  <p className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+                    Seçtiğiniz kriterlere uygun vitrin ilanı bulunamadı.
                   </p>
                   <button
+                    type="button"
                     onClick={resetFilters}
-                    className="px-4 py-1.5 text-xs font-semibold bg-[#dc5075] text-white rounded hover:bg-[#c93f64] transition-colors"
+                    className="px-4 py-2 rounded bg-[#dc5075] text-white text-xs font-bold hover:bg-[#c43d62]"
                   >
                     Tüm Vitrin İlanlarını Göster
                   </button>
@@ -349,91 +749,60 @@ export default function HomePage() {
               )}
             </div>
 
-            {/* 3. PEMBE BAŞLIKLI BÖLÜM: YENİ EKLENEN İLANLAR (TAVSİYE EDİLENLER) */}
-            <section className="space-y-0">
-              {/* PEMBE BAŞLIK BANTI */}
-              <div
-                style={{
-                  background:
-                    "linear-gradient(0deg, rgba(220,80,117,1) 0%, rgba(227,97,148,1) 100%)",
-                }}
-                className="h-9 px-4 rounded-t-lg flex items-center justify-between text-white shadow-xs"
-              >
-                <h3 className="font-bold text-xs sm:text-sm tracking-wide">
-                  YENİ EKLENEN İLANLAR (TAVSİYE EDİLENLER)
-                </h3>
-                <Link
-                  href={"/listing-stay?sort=newest" as Route}
-                  className="text-[11px] font-semibold hover:underline text-rose-100"
-                >
-                  Tümünü Gör →
-                </Link>
-              </div>
+            {/* 2.3 ALT İKİLİ LİSTE: YENİ EKLENEN İLANLAR & GÜNÜN VİTRİN İLANLARI */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+              <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 shadow-2xs">
+                <div className="flex items-center justify-between pb-2.5 mb-3 border-b-2 border-[#e7277d]">
+                  <h2 className="text-base font-extrabold text-[#e7277d] dark:text-[#f26ba8] tracking-tight">
+                    Yeni Eklenen İlanlar
+                  </h2>
+                  <Link
+                    href={"/listing-stay?sort=newest" as Route}
+                    className="text-xs font-bold text-[#e7277d] hover:underline"
+                  >
+                    Tümünü Gör →
+                  </Link>
+                </div>
 
-              {/* 2 SÜTUNLU LİSTE KARTLARI */}
-              <div className="p-3 bg-white dark:bg-neutral-800 rounded-b-lg border border-t-0 border-neutral-200 dark:border-neutral-700 shadow-2xs">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                <div className="space-y-2.5 max-h-[680px] overflow-y-auto pr-1">
                   {YENI_EKLENEN_ILANLAR.map((item) => (
-                    <GuncelListCard
-                      key={item.id}
-                      item={item}
-                      themeColor="pink"
-                    />
+                    <GuncelListCard key={item.id} item={item} themeColor="pink" />
                   ))}
                 </div>
               </div>
-            </section>
 
-            {/* 4. YEŞİL BAŞLIKLI BÖLÜM: GÜNÜN VİTRİN İLANLARI (YENİ KATILANLAR) */}
-            <section className="space-y-0 pt-2">
-              {/* YEŞİL BAŞLIK BANTI */}
-              <div
-                style={{
-                  background:
-                    "linear-gradient(0deg, rgba(132,176,0,1) 0%, rgba(158,192,0,1) 100%)",
-                }}
-                className="h-9 px-4 rounded-t-lg flex items-center justify-between text-white shadow-xs"
-              >
-                <h3 className="font-bold text-xs sm:text-sm tracking-wide">
-                  GÜNÜN VİTRİN İLANLARI (YENİ KATILANLAR)
-                </h3>
-                <Link
-                  href={"/listing-stay" as Route}
-                  className="text-[11px] font-semibold hover:underline text-emerald-100"
-                >
-                  Tümünü Gör →
-                </Link>
-              </div>
+              <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 shadow-2xs">
+                <div className="flex items-center justify-between pb-2.5 mb-3 border-b-2 border-[#007f00]">
+                  <h2 className="text-base font-extrabold text-[#007f00] dark:text-emerald-400 tracking-tight">
+                    Günün Vitrin İlanları
+                  </h2>
+                  <Link
+                    href={"/listing-stay" as Route}
+                    className="text-xs font-bold text-[#007f00] dark:text-emerald-400 hover:underline"
+                  >
+                    Tümünü Gör →
+                  </Link>
+                </div>
 
-              {/* 2 SÜTUNLU LİSTE KARTLARI */}
-              <div className="p-3 bg-white dark:bg-neutral-800 rounded-b-lg border border-t-0 border-neutral-200 dark:border-neutral-700 shadow-2xs">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                <div className="space-y-2.5 max-h-[680px] overflow-y-auto pr-1">
                   {GUNUN_VITRIN_ILANLARI.map((item) => (
-                    <GuncelListCard
-                      key={item.id}
-                      item={item}
-                      themeColor="green"
-                    />
+                    <GuncelListCard key={item.id} item={item} themeColor="green" />
                   ))}
                 </div>
               </div>
-            </section>
+            </div>
 
-            {/* 5. İLANLARIN ALTINDA HIZLI İL & İLÇE HARİTA KONUM BİLGİSİ (SAYFA YAVAŞLATMAYAN HAFİF YAPI) */}
-            <section className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 shadow-2xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full bg-[#dc5075]/10 text-[#dc5075] flex items-center justify-center shrink-0">
-                    <MapPinIcon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-xs sm:text-sm text-neutral-900 dark:text-neutral-100">
-                      İlanların İl & İlçe Harita Konum Bilgisi: <span className="text-[#dc5075]">{mapCity} / {mapDistrict} Merkez</span>
-                    </h3>
-                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
-                      Her ilanın detay sayfasının altında o ilanın bulunduğu il ve ilçe merkez haritası yer almaktadır.
-                    </p>
-                  </div>
+            {/* 2.4 İLANLARIN ALTINDA ETKİLEŞİMLİ İL / İLÇE HARİTA BİLGİSİ */}
+            <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-5 shadow-2xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-200 dark:border-neutral-700">
+                <div>
+                  <h2 className="text-base font-extrabold text-neutral-800 dark:text-white flex items-center gap-2">
+                    <MapPinIcon className="w-5 h-5 text-[#dc5075]" />
+                    <span>Konuma Göre Köpek İlanları Haritası ({mapCity} / {mapDistrict})</span>
+                  </h2>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                    İl ve ilçe seçerek o bölgedeki ilan konumunu harita üzerinde inceleyebilirsiniz.
+                  </p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
@@ -442,11 +811,10 @@ export default function HomePage() {
                     onChange={(e) => {
                       const newCity = e.target.value;
                       setMapCity(newCity);
-                      setSelectedCity(newCity);
                       const dList = getDistrictsOfCity(newCity);
-                      setMapDistrict(dList[0]?.name || "Merkez");
+                      setMapDistrict(dList[0] || "Merkez");
                     }}
-                    className="text-xs font-bold bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg px-3 py-1.5 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
+                    className="text-xs font-semibold rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 px-3 py-2 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
                   >
                     {TURKEY_CITIES.map((c) => (
                       <option key={c} value={c}>
@@ -458,41 +826,72 @@ export default function HomePage() {
                   <select
                     value={mapDistrict}
                     onChange={(e) => setMapDistrict(e.target.value)}
-                    className="text-xs font-bold bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg px-3 py-1.5 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-[#dc5075]"
+                    className="text-xs font-semibold rounded border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 px-3 py-2 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
                   >
                     {currentMapDistricts.map((d) => (
-                      <option key={d.name} value={d.name}>
-                        {d.name} Merkez
+                      <option key={d} value={d}>
+                        {d}
                       </option>
                     ))}
                   </select>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCity(mapCity)}
+                    className="px-3.5 py-2 rounded bg-[#dc5075] hover:bg-[#c43d62] text-white text-xs font-bold transition-colors"
+                  >
+                    📍 {mapCity} İlanlarını Filtrele
+                  </button>
+
+                  <Link
+                    href={"/add-listing/1" as Route}
+                    className="px-3.5 py-2 rounded bg-[#802859] hover:bg-[#691f48] text-white text-xs font-bold transition-colors"
+                  >
+                    + Bu Konumda İlan Ekle
+                  </Link>
                 </div>
               </div>
-            </section>
 
-            {/* 6. RESMİ SEO VE PLATFORM BİLGİLENDİRME KUTUSU */}
-            <div className="bg-[#FAF8F5] dark:bg-neutral-800/60 rounded-lg border border-neutral-300 dark:border-neutral-700 p-4 text-xs text-neutral-700 dark:text-neutral-300 space-y-2.5 leading-relaxed">
-              <div className="flex items-center gap-2 font-bold text-neutral-900 dark:text-neutral-100 border-b border-neutral-200 dark:border-neutral-700 pb-2">
-                <InformationCircleIcon className="w-5 h-5 text-[#dc5075]" />
-                <span className="text-sm">
-                  Köpek Sahipleri ve Köpek Arayanların Buluşma Platformu
-                </span>
+              <div className="w-full h-[320px] rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700 bg-neutral-100 relative shadow-inner">
+                <iframe
+                  title={`Köpek Evreni Harita - ${mapCity} ${mapDistrict}`}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                    mapCity + " " + mapDistrict + ", Türkiye"
+                  )}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+                />
               </div>
-
-              <p>
-                Platformumuz Türkiye genelinde köpekleri olanlar ile köpek arayanları bir araya getiren bağımsız bir ilan ve ırk portalıdır. Sitemiz, köpek sahiplerinin ilanlarını doğrudan ilgililere ulaştırmasını, ırk özellikleri ve güncel bilgileri güvenle inceleyebilmesini sağlar.
-              </p>
-
-              <p className="font-medium text-neutral-800 dark:text-neutral-200">
-                <strong>GÜVENLİ İLAN VE BİLGİLENDİRME: </strong>
-                Sitemiz aracılık veya komisyonculuk yapmaz. İlan veren kişi ile o ilanla ilgilenen kişiler aralarında doğrudan iletişim kurarlar. Alışveriş yapacağınız ilan sahiplerine mutlaka aşı karnesi, mikroçip kaydı ve sağlık durumunu sorunuz. Teslim almadığınız can için önceden hiçbir ad altında para veya kapora kesinlikle göndermeyiniz.
-              </p>
-
-              <p>
-                Yönetmeliğe tabi satış yerlerinde 2 aylıktan küçük ve aşısı yapılmamış yavruların teslimi uygun değildir. Sitemizde yasaklı ırk ilanlarına kesinlikle izin verilmemektedir. Hukuka veya mevzuata aykırı olduğunu düşündüğünüz içerikleri lütfen iletişim kanallarımızdan bize bildiriniz.
-              </p>
             </div>
 
+            {/* 2.5 BİLGİLENDİRME VE KÖPEK IRKLARI PORTAL ÖZETİ */}
+            <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-5 shadow-2xs space-y-4 text-xs leading-relaxed text-neutral-600 dark:text-neutral-300">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-lg bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-800/40">
+                  <h3 className="font-bold text-sm text-amber-900 dark:text-amber-300 flex items-center gap-1.5 mb-1.5">
+                    <ShieldCheckIcon className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span>Köpek Evreni Güvenli İlan & Sahiplenme Rehberi</span>
+                  </h3>
+                  <p>
+                    Sitemizde yer alan tüm köpek ilanları, köpek sahipleri ile yeni bir can dostu arayan aileleri doğrudan buluşturmak amacıyla yayınlanmaktadır. Görmeden kapora veya ön ödeme talep eden kişilere itibar etmeyiniz; can dostunuzu mutlaka veteriner kontrolünde teslim alınız.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-lg bg-rose-50/70 dark:bg-rose-950/20 border border-rose-200/70 dark:border-rose-800/40">
+                  <h3 className="font-bold text-sm text-rose-900 dark:text-rose-300 flex items-center gap-1.5 mb-1.5">
+                    <InformationCircleIcon className="w-4 h-4 text-[#dc5075] shrink-0" />
+                    <span>Türkiye&apos;nin En Kapsamlı Köpek Cinsleri ve İlan Portalı</span>
+                  </h3>
+                  <p>
+                    Poodle Toy, Maltipoo, Pomeranian Boo, Golden Retriever, Cane Corso, Kangal, French Bulldog ve Chihuahua başta olmak üzere <strong>48 farklı köpek ırkı</strong> ve <strong>81 il</strong> bazında kategorilendirilmiş yüzlerce güncel ilana sol menüden anında ulaşabilirsiniz.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

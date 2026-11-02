@@ -13,6 +13,7 @@ import { getLocationCoordinates } from "@/data/turkeyLocations";
 import { PetListing } from "@/types/pet";
 import { Route } from "@/routers/types";
 import PetCard from "@/components/PetCard";
+import { MobilePetCard } from "@/components/MobileCards";
 import InteractiveMap from "@/components/InteractiveMap";
 import {
   MapPinIcon,
@@ -354,7 +355,7 @@ const ListingStayDetailPage: FC = () => {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <span>{pet.breed}</span>
+                    <span className="truncate">{pet.breed}</span>
                     <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -577,7 +578,7 @@ const ListingStayDetailPage: FC = () => {
             <h2 className="text-xl sm:text-2xl font-black text-neutral-900 dark:text-white mb-6">
               İlginizi Çekebilecek Diğer Canlar
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
+            <div className="grid grid-cols-2 gap-2.5 md:hidden">{relatedPets.map((p) => (<MobilePetCard key={p.id} item={p} />))}</div><div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedPets.map((p) => (
                 <PetCard key={p.id} data={p} />
               ))}

@@ -83,7 +83,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="nc-Footer relative py-16 lg:py-20 bg-[#1C1917] text-[#FAF8F5] border-t border-neutral-800">
+    <footer className="nc-Footer relative py-10 pb-24 lg:py-20 bg-[#1C1917] text-[#FAF8F5] border-t border-neutral-800">
       <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
         <div className="grid grid-cols-2 gap-y-10 gap-x-6 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10 pb-12 border-b border-neutral-800">
           <div className="col-span-2 md:col-span-4 lg:col-span-1 flex flex-col space-y-4 min-w-0 pr-2">

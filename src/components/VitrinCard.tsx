@@ -27,8 +27,8 @@ export default function VitrinCard({ item }: VitrinCardProps) {
 
   return (
     <div className="group relative bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col justify-between">
-      {/* ÜST GÖRSEL ALANI (Mobilde orantılı 4/3, Masaüstünde 1/1 kare) */}
-      <div className="relative aspect-[4/3] sm:aspect-square w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+      {/* ÜST GÖRSEL ALANI (1/1 Kare) */}
+      <div className="relative aspect-square w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
         <Link href={`/listing-stay-detail?id=${item.id}` as Route} className="block w-full h-full">
           <img
             src={item.image}
@@ -41,24 +41,24 @@ export default function VitrinCard({ item }: VitrinCardProps) {
         {/* Süper İlan Rozeti */}
         {item.superIlan && (
           <span
-            className="absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-amber-500 text-white text-[8px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded shadow-sm flex items-center gap-0.5"
+            className="absolute top-1.5 left-1.5 bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm flex items-center gap-0.5"
             title="Öne Çıkan Süper İlan"
           >
-            <SparklesIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
+            <SparklesIcon className="w-3 h-3 text-white" />
             <span>Süper İlan</span>
           </span>
         )}
 
         {/* Görüntülenme Sayısı */}
-        <div className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 bg-black/60 backdrop-blur-xs text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded flex items-center gap-0.5 sm:gap-1 font-medium">
-          <EyeIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-neutral-300" />
+        <div className="absolute top-1.5 right-1.5 bg-black/60 backdrop-blur-xs text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 font-medium">
+          <EyeIcon className="w-3 h-3 text-neutral-300" />
           <span>{item.views}</span>
         </div>
 
         {/* Görsel Altı Yarı Saydam Bilgi Bandı (Irk / Yaş) */}
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-1.5 sm:p-2 pt-4 sm:pt-5 text-white">
-          <div className="text-[10px] sm:text-xs font-bold tracking-tight truncate drop-shadow-xs flex items-center gap-1.5 sm:gap-2">
-            <span className="w-5 h-5 sm:w-7 sm:h-7 rounded-full overflow-hidden bg-white/20 shrink-0 ring-1 sm:ring-2 ring-white/80 inline-flex items-center justify-center shadow-sm">
+        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-2 pt-5 text-white">
+          <div className="text-xs font-bold tracking-tight truncate drop-shadow-xs flex items-center gap-2">
+            <span className="w-7 h-7 rounded-full overflow-hidden bg-white/20 shrink-0 ring-2 ring-white/80 inline-flex items-center justify-center shadow-sm">
               <img
                 src={`/images/breeds/${item.breedSlug || "poodle-toy"}.png`}
                 alt={item.breed}
@@ -73,20 +73,20 @@ export default function VitrinCard({ item }: VitrinCardProps) {
       </div>
 
       {/* METİN VE BİLGİ ALANI */}
-      <div className="p-1.5 sm:p-2 flex-1 flex flex-col justify-between space-y-1 sm:space-y-1.5">
+      <div className="p-2 flex-1 flex flex-col justify-between space-y-1.5">
         <Link
           href={`/listing-stay-detail?id=${item.id}` as Route}
-          className="block font-semibold text-[11px] sm:text-xs text-neutral-900 dark:text-neutral-100 hover:text-[#dc5075] dark:hover:text-[#dc5075] transition-colors line-clamp-1 sm:line-clamp-2 leading-tight"
+          className="block font-semibold text-xs text-neutral-900 dark:text-neutral-100 hover:text-[#dc5075] dark:hover:text-[#dc5075] transition-colors line-clamp-2 leading-snug"
           title={item.title}
         >
           {item.title}
         </Link>
 
-        <div className="flex items-center justify-between text-[10px] sm:text-[11px] pt-0.5 sm:pt-1 border-t border-neutral-100 dark:border-neutral-700/60">
+        <div className="flex items-center justify-between text-[11px] pt-1 border-t border-neutral-100 dark:border-neutral-700/60">
           <span className="font-bold text-[#007f00] dark:text-emerald-400 truncate">
             {item.city}
           </span>
-          <span className="text-neutral-500 dark:text-neutral-400 font-medium text-[9px] sm:text-[10px] shrink-0">
+          <span className="text-neutral-500 dark:text-neutral-400 font-medium text-[10px]">
             {item.gender}
           </span>
         </div>
@@ -94,7 +94,7 @@ export default function VitrinCard({ item }: VitrinCardProps) {
         {/* Durum Rozeti */}
         <div className="pt-0.5">
           <span
-            className={`block text-center text-[9px] sm:text-[10px] font-bold py-0.5 px-1.5 rounded ${getBadgeStyle(
+            className={`block text-center text-[10px] font-bold py-0.5 px-1.5 rounded ${getBadgeStyle(
               item.status
             )} truncate`}
           >
