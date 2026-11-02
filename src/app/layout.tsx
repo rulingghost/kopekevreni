@@ -44,8 +44,8 @@ export default function RootLayout({
   return (
     <html lang="tr" className={`${poppins.variable} ${playfair.variable} ${poppins.className}`}>
       <body className="bg-[#FAF8F5] text-base dark:bg-[#151312] text-[#1C1917] dark:text-[#E8E4DF] antialiased selection:bg-[#7A1C30] selection:text-white min-h-screen flex flex-col justify-between">
-        {/* TOP ANNOUNCEMENT BAR */}
-        <div className="bg-[#1C1917] text-[#FAF8F5] text-[10px] sm:text-xs py-1.5 sm:py-2 px-3 sm:px-4 text-center font-medium tracking-wide flex items-center justify-center gap-1.5 sm:gap-2 border-b border-neutral-800">
+        {/* TOP ANNOUNCEMENT BAR (Mobilde gizli, sadece masaüstünde görünür) */}
+        <div className="hidden md:flex bg-[#1C1917] text-[#FAF8F5] text-xs py-2 px-4 text-center font-medium tracking-wide items-center justify-center gap-2 border-b border-neutral-800">
           <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059] inline-block animate-pulse shrink-0"></span>
           <span className="truncate">
             Köpek İlanları & Cins Portalı • <strong className="text-[#C5A059] font-semibold">Köpek Sahipleri ve Arayanların Buluşma Noktası</strong>

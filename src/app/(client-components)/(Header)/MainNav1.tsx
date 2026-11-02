@@ -13,6 +13,7 @@ import {
   UserIcon,
   PlusCircleIcon,
   ArrowRightOnRectangleIcon,
+  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
 export interface MainNav1Props {
@@ -27,9 +28,9 @@ const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
       className={`nc-MainNav1 relative z-10 bg-[#FAF8F5]/95 dark:bg-[#151312]/95 backdrop-blur-md border-b border-[#EDE7DE] dark:border-neutral-800 transition-colors ${className}`}
     >
       {/* ========================================================= */}
-      {/* 1. SIFIRDAN YAZILMIŞ MOBİL HEADER (< 768px)                */}
+      {/* 1. SADELEŞTİRİLMİŞ MOBİL HEADER (< 768px)                 */}
       {/* ========================================================= */}
-      <div className="flex md:hidden items-center justify-between h-14 px-3 max-w-full">
+      <div className="flex md:hidden items-center justify-between h-14 px-3.5 max-w-full">
         {/* Sol: Kompakt Mobil Logo */}
         <Link href="/" className="flex items-center gap-2 min-w-0 shrink-0">
           <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0">
@@ -39,46 +40,21 @@ const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
               className="w-full h-full object-contain"
             />
           </div>
-          <span className="font-serif font-black text-base tracking-tight text-[#1C1917] dark:text-[#FAF8F5] whitespace-nowrap">
+          <span className="font-serif font-black text-lg tracking-tight text-[#1C1917] dark:text-[#FAF8F5] whitespace-nowrap">
             Köpek{" "}
             <span className="italic font-normal text-[#dc5075]">Evreni</span>
           </span>
         </Link>
 
-        {/* Sağ: Sadece 3 Temiz Eleman (Giriş/Profil, + İlan Ver, Menü) -> Asla Çakışmaz */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          {user ? (
-            <Link
-              href={"/ilanlarim" as Route}
-              className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-[11px] font-bold text-emerald-800 dark:text-emerald-200"
-            >
-              <img
-                src={user.avatar}
-                alt={user.name}
-                className="w-5 h-5 rounded-full object-cover"
-              />
-              <span className="px-1 rounded-full bg-[#dc5075] text-white text-[10px]">
-                {myListings.length}
-              </span>
-            </Link>
-          ) : (
-            <Link
-              href={"/login" as Route}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-bold border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200"
-            >
-              <UserIcon className="w-3.5 h-3.5 text-[#dc5075]" />
-              <span>Giriş</span>
-            </Link>
-          )}
-
+        {/* Sağ: Sadece Kompakt Arama İkonu ve Hamburger Menü */}
+        <div className="flex items-center gap-1 shrink-0">
           <Link
-            href={"/add-listing/1" as Route}
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-extrabold bg-[#dc5075] text-white shadow-xs"
+            href={"/listing-stay" as Route}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            title="İlanlarda Ara"
           >
-            <PlusCircleIcon className="w-3.5 h-3.5" />
-            <span>İlan Ver</span>
+            <MagnifyingGlassIcon className="w-5 h-5" />
           </Link>
-
           <MenuBar />
         </div>
       </div>

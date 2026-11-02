@@ -274,149 +274,35 @@ const ListingStayPage: FC = () => {
   return (
     <div className="min-h-screen pb-16 md:py-10 bg-[#FAF8F5] dark:bg-[#151312] transition-colors">
       {/* ===================================================================== */}
-      {/* 1. SIFIRDAN YAZILMIŞ MOBİL İLANLAR SAYFASI (< 768px)                   */}
+      {/* 1. KOMPAKT MOBİL İLANLAR SAYFASI + BOTTOM SHEET FİLTRE (< 768px)      */}
       {/* ===================================================================== */}
-      <div className="block md:hidden px-3 pt-3 space-y-3.5">
-        {/* Mobil Başlık ve İlan Sayısı */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="font-serif text-lg font-extrabold text-[#1C1917] dark:text-[#FAF8F5]">
-              {pageHeading}
+      <div className="block md:hidden px-2.5 pt-2.5 space-y-2.5">
+        {/* Tek Satır Kompakt Üst Bar: Başlık & Bottom Sheet Filtrele Butonu */}
+        <div className="flex items-center justify-between bg-white dark:bg-neutral-800 px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-2xs">
+          <div className="min-w-0 pr-2">
+            <h1 className="font-serif text-sm font-extrabold text-[#1C1917] dark:text-[#FAF8F5] truncate">
+              {pageHeading} ({filteredListings.length})
             </h1>
-            <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
-              Toplam <strong>{filteredListings.length}</strong> aktif ilan listeleniyor
-            </p>
+            {(filters.breed || filters.city || filters.gender !== "ALL") && (
+              <p className="text-[10px] text-[#dc5075] font-semibold truncate">
+                {filters.breed || "Tüm Irklar"} {filters.city ? `• ${filters.city}` : ""}
+              </p>
+            )}
           </div>
 
           <button
             type="button"
-            onClick={() => setShowMobileExtraFilters(!showMobileExtraFilters)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1 border transition-colors ${
-              showMobileExtraFilters
-                ? "bg-[#dc5075] text-white border-[#dc5075]"
-                : "bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border-neutral-200 dark:border-neutral-700"
-            }`}
+            onClick={() => setShowMobileExtraFilters(true)}
+            className="px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 bg-[#dc5075] text-white shadow-2xs shrink-0"
           >
             <AdjustmentsHorizontalIcon className="w-4 h-4" />
             <span>Filtrele</span>
           </button>
         </div>
 
-        {/* Mobil Hızlı Sekmeler (Tümü / Vitrin / Yeni) */}
-        <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs font-bold">
-          <button
-            type="button"
-            onClick={() => {
-              setSortBy("NEWEST");
-              setFilters((p) => ({ ...p, listingType: "ALL" }));
-            }}
-            className={`py-2 rounded-lg transition-colors ${
-              sortBy === "NEWEST" && filters.listingType === "ALL"
-                ? "bg-[#dc5075] text-white"
-                : "text-neutral-600 dark:text-neutral-300"
-            }`}
-          >
-            ⚡ Tümü / Yeni
-          </button>
-          <button
-            type="button"
-            onClick={() => setSortBy("VITRIN")}
-            className={`py-2 rounded-lg transition-colors ${
-              sortBy === "VITRIN"
-                ? "bg-[#802859] text-white"
-                : "text-neutral-600 dark:text-neutral-300"
-            }`}
-          >
-            ✨ Vitrin
-          </button>
-          <button
-            type="button"
-            onClick={() => setSortBy("POPULAR")}
-            className={`py-2 rounded-lg transition-colors ${
-              sortBy === "POPULAR"
-                ? "bg-amber-600 text-white"
-                : "text-neutral-600 dark:text-neutral-300"
-            }`}
-          >
-            🔥 Popüler
-          </button>
-        </div>
-
-        {/* Mobil Hızlı Irk ve Şehir Seçimi (Her zaman el altında, 2 Sütun) */}
-        <div className="grid grid-cols-2 gap-2">
-          <select
-            value={filters.breed}
-            onChange={(e) => setFilters((p) => ({ ...p, breed: e.target.value }))}
-            className="w-full text-xs font-semibold bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 text-neutral-800 dark:text-neutral-100"
-          >
-            <option value="">Tüm Köpek Irkları</option>
-            {ALL_BREEDS.map((b) => (
-              <option key={b.slug} value={b.name}>
-                {b.name}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={filters.city}
-            onChange={(e) => setFilters((p) => ({ ...p, city: e.target.value }))}
-            className="w-full text-xs font-semibold bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 text-neutral-800 dark:text-neutral-100"
-          >
-            <option value="">Tüm Şehirler (81)</option>
-            {TURKEY_CITIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Açılır/Kapanır Ekstra Mobil Filtre Kutusu */}
-        {showMobileExtraFilters && (
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700 space-y-2.5 shadow-md">
-            <div className="grid grid-cols-3 gap-1.5 text-xs font-bold">
-              {[
-                { label: "Tümü", val: "ALL" },
-                { label: "Erkek ♂", val: "MALE" },
-                { label: "Dişi ♀", val: "FEMALE" },
-              ].map((g) => (
-                <button
-                  key={g.val}
-                  type="button"
-                  onClick={() => setFilters((p) => ({ ...p, gender: g.val as any }))}
-                  className={`py-1.5 rounded-lg border ${
-                    filters.gender === g.val
-                      ? "bg-[#dc5075] text-white border-[#dc5075]"
-                      : "border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300"
-                  }`}
-                >
-                  {g.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex items-center justify-between pt-1">
-              <button
-                type="button"
-                onClick={handleReset}
-                className="text-xs font-bold text-rose-600"
-              >
-                Filtreleri Sıfırla
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowMobileExtraFilters(false)}
-                className="px-4 py-1.5 rounded-lg bg-[#dc5075] text-white text-xs font-bold"
-              >
-                Uygula ({filteredListings.length})
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Mobil 2 Sütunlu İlan Grid'i (MobilePetCard - Çakışmasız) */}
+        {/* Mobil 2 Sütunlu İlan Grid'i (Doğrudan Başlar) */}
         {filteredListings.length > 0 ? (
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-2 gap-2">
             {filteredListings.map((pet) => (
               <MobilePetCard key={pet.id} item={pet} />
             ))}
@@ -433,6 +319,162 @@ const ListingStayPage: FC = () => {
             >
               Filtreleri Temizle
             </button>
+          </div>
+        )}
+
+        {/* MOBİL BOTTOM SHEET (ALTTAN AÇILIR DETAYLI FİLTRE PANELİ) */}
+        {showMobileExtraFilters && (
+          <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/60 backdrop-blur-xs">
+            <div
+              className="flex-1"
+              onClick={() => setShowMobileExtraFilters(false)}
+            />
+            <div className="bg-white dark:bg-neutral-900 rounded-t-3xl border-t border-neutral-200 dark:border-neutral-800 p-4 space-y-4 max-h-[82vh] overflow-y-auto shadow-2xl">
+              <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-700 rounded-full mx-auto" />
+              <div className="flex items-center justify-between pb-2 border-b border-neutral-100 dark:border-neutral-800">
+                <h3 className="text-sm font-extrabold text-neutral-900 dark:text-white">
+                  İlanları Filtrele & Sırala
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowMobileExtraFilters(false)}
+                  className="text-xs font-bold text-neutral-500 px-2 py-1"
+                >
+                  Kapat ✕
+                </button>
+              </div>
+
+              {/* Sıralama & Kategori */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-neutral-500 uppercase">
+                  İlan Türü & Sıralama
+                </label>
+                <div className="grid grid-cols-3 gap-1.5 text-xs font-bold">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSortBy("NEWEST");
+                      setFilters((p) => ({ ...p, listingType: "ALL" }));
+                    }}
+                    className={`py-2 rounded-xl border ${
+                      sortBy === "NEWEST"
+                        ? "bg-[#dc5075] text-white border-[#dc5075]"
+                        : "border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300"
+                    }`}
+                  >
+                    ⚡ Yeni
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSortBy("VITRIN")}
+                    className={`py-2 rounded-xl border ${
+                      sortBy === "VITRIN"
+                        ? "bg-[#802859] text-white border-[#802859]"
+                        : "border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300"
+                    }`}
+                  >
+                    ✨ Vitrin
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSortBy("POPULAR")}
+                    className={`py-2 rounded-xl border ${
+                      sortBy === "POPULAR"
+                        ? "bg-amber-600 text-white border-amber-600"
+                        : "border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300"
+                    }`}
+                  >
+                    🔥 Popüler
+                  </button>
+                </div>
+              </div>
+
+              {/* 48 Köpek Cinsi Seçimi */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-neutral-500 uppercase">
+                  Köpek Cinsi (48 Irk)
+                </label>
+                <select
+                  value={filters.breed}
+                  onChange={(e) => setFilters((p) => ({ ...p, breed: e.target.value }))}
+                  className="w-full text-xs font-semibold bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-3 py-2.5 text-neutral-800 dark:text-neutral-100"
+                >
+                  <option value="">Tüm Köpek Cinsleri (48)</option>
+                  {ALL_BREEDS.map((b) => (
+                    <option key={b.slug} value={b.name}>
+                      {b.name} ({b.count})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* 81 Şehir Seçimi */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-neutral-500 uppercase">
+                  Şehir (81 İl)
+                </label>
+                <select
+                  value={filters.city}
+                  onChange={(e) => setFilters((p) => ({ ...p, city: e.target.value }))}
+                  className="w-full text-xs font-semibold bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-3 py-2.5 text-neutral-800 dark:text-neutral-100"
+                >
+                  <option value="">Tüm Şehirler (81)</option>
+                  {TURKEY_CITIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Cinsiyet */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-neutral-500 uppercase">
+                  Cinsiyet
+                </label>
+                <div className="grid grid-cols-3 gap-1.5 text-xs font-bold">
+                  {[
+                    { label: "Tümü", val: "ALL" },
+                    { label: "Erkek ♂", val: "MALE" },
+                    { label: "Dişi ♀", val: "FEMALE" },
+                  ].map((g) => (
+                    <button
+                      key={g.val}
+                      type="button"
+                      onClick={() => setFilters((p) => ({ ...p, gender: g.val as any }))}
+                      className={`py-2 rounded-xl border ${
+                        filters.gender === g.val
+                          ? "bg-[#dc5075] text-white border-[#dc5075]"
+                          : "border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300"
+                      }`}
+                    >
+                      {g.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Alt Aksiyon Butonları */}
+              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleReset();
+                    setShowMobileExtraFilters(false);
+                  }}
+                  className="py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs font-bold text-neutral-700 dark:text-neutral-300"
+                >
+                  Temizle
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowMobileExtraFilters(false)}
+                  className="py-2.5 rounded-xl bg-[#dc5075] text-white text-xs font-extrabold shadow-md"
+                >
+                  İlanları Göster ({filteredListings.length})
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -7,7 +7,10 @@ import { VitrinListing, GuncelListing } from "@/data/kopekDunyasiData";
 import { PetListing, DogBreed } from "@/types/pet";
 
 /**
- * 1. SIFIRDAN MOBİL VİTRİN KARTI (2 Sütunlu Grid İçin Çakışmasız Mobil Kart)
+ * 1. MOBİL VİTRİN KARTI
+ * - Tamamı tıklanabilir (<Link>), kaba 'İlanı İncele' butonu gizlendi
+ * - Başlık 2 satır (line-clamp-2 leading-snug) okunaklı hale getirildi
+ * - Kart içi boşluklar (p-2) daraltıldı
  */
 export function MobileVitrinCard({ item }: { item: VitrinListing }) {
   const badgeBg =
@@ -20,9 +23,9 @@ export function MobileVitrinCard({ item }: { item: VitrinListing }) {
   return (
     <Link
       href={`/listing-stay-detail?id=${item.id}` as Route}
-      className="flex flex-col bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-2xs active:scale-[0.99] transition-transform"
+      className="flex flex-col bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200/90 dark:border-neutral-700/80 overflow-hidden shadow-2xs active:scale-[0.98] transition-transform"
     >
-      {/* Üst Görsel: Tek Rozet (Sol Üst) + Tek Şehir (Sol Alt) -> Çakışma İmkansız */}
+      {/* Üst Görsel */}
       <div className="relative aspect-[4/3] w-full bg-neutral-100 dark:bg-neutral-900 overflow-hidden">
         <img
           src={item.image}
@@ -31,40 +34,39 @@ export function MobileVitrinCard({ item }: { item: VitrinListing }) {
           loading="lazy"
         />
         <span
-          className={`absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md text-[9px] font-extrabold shadow-xs ${badgeBg}`}
+          className={`absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[8px] font-extrabold tracking-tight shadow-2xs ${badgeBg}`}
         >
           {item.superIlan ? "⭐ Süper" : item.status}
         </span>
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent px-2 py-1.5 pt-4">
-          <span className="block text-[10px] font-bold text-white truncate">
+        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-2 py-1 pt-3">
+          <span className="block text-[9px] font-semibold text-white/95 truncate">
             📍 {item.city}
           </span>
         </div>
       </div>
 
-      {/* Alt Bilgi Alanı: Her Satırda Tek Eleman (Truncate) */}
-      <div className="p-2.5 flex flex-col gap-1">
-        <div className="flex items-center gap-1.5 min-w-0">
-          <img
-            src={`/images/breeds/${item.breedSlug || "poodle-toy"}.png`}
-            alt={item.breed}
-            className="w-4 h-4 rounded-full object-cover ring-1 ring-[#dc5075] shrink-0"
-          />
-          <span className="text-[10px] font-extrabold text-[#dc5075] truncate">
-            {item.breed}
-          </span>
+      {/* Daraltılmış Kart İçi Boşluk (p-2) & 2 Satır Okunaklı Başlık */}
+      <div className="p-2 flex flex-col justify-between flex-1 gap-1">
+        <div className="space-y-0.5">
+          <div className="flex items-center gap-1 min-w-0">
+            <img
+              src={`/images/breeds/${item.breedSlug || "poodle-toy"}.png`}
+              alt={item.breed}
+              className="w-3.5 h-3.5 rounded-full object-cover ring-1 ring-[#dc5075]/60 shrink-0"
+            />
+            <span className="text-[9px] font-extrabold text-[#dc5075] uppercase tracking-tight truncate">
+              {item.breed}
+            </span>
+          </div>
+
+          <h3 className="text-[11px] font-bold text-neutral-900 dark:text-neutral-100 leading-snug line-clamp-2">
+            {item.title}
+          </h3>
         </div>
 
-        <h3 className="text-xs font-bold text-neutral-900 dark:text-white truncate">
-          {item.title}
-        </h3>
-
-        <div className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 truncate">
-          {item.gender} • {item.ageText}
-        </div>
-
-        <div className="mt-1 py-1.5 rounded-lg bg-[#dc5075]/10 dark:bg-[#dc5075]/20 text-[#dc5075] dark:text-[#f26ba8] text-[10px] font-extrabold text-center">
-          İlanı İncele →
+        <div className="pt-1 border-t border-neutral-100 dark:border-neutral-700/60 flex items-center justify-between text-[9px] text-neutral-500 dark:text-neutral-400 font-medium">
+          <span>{item.gender}</span>
+          <span>{item.ageText}</span>
         </div>
       </div>
     </Link>
@@ -72,7 +74,7 @@ export function MobileVitrinCard({ item }: { item: VitrinListing }) {
 }
 
 /**
- * 2. SIFIRDAN MOBİL YATAY LİSTE KARTI (Tam Genişlikli Kompakt Satır)
+ * 2. MOBİL YATAY LİSTE KARTI
  */
 export function MobileGuncelRowCard({
   item,
@@ -84,23 +86,23 @@ export function MobileGuncelRowCard({
   return (
     <Link
       href={`/listing-stay-detail?id=${item.id}` as Route}
-      className="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 shadow-2xs active:bg-neutral-50 dark:active:bg-neutral-700/60 transition-colors"
+      className="flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 shadow-2xs active:bg-neutral-50 dark:active:bg-neutral-700/60 transition-colors"
     >
       <img
         src={item.image}
         alt={item.title}
-        className="w-16 h-16 rounded-lg object-cover shrink-0 bg-neutral-100 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-700"
+        className="w-14 h-14 rounded-lg object-cover shrink-0 bg-neutral-100 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-700"
         loading="lazy"
       />
       <div className="flex-1 min-w-0 space-y-0.5">
-        <div className="flex items-center gap-1.5 min-w-0">
+        <div className="flex items-center gap-1 min-w-0">
           <img
             src={`/images/breeds/${item.breedSlug || "poodle-toy"}.png`}
             alt={item.breed}
-            className="w-4 h-4 rounded-full object-cover shrink-0 ring-1 ring-neutral-300"
+            className="w-3.5 h-3.5 rounded-full object-cover shrink-0 ring-1 ring-neutral-300"
           />
           <span
-            className={`text-[10px] font-extrabold truncate ${
+            className={`text-[9px] font-extrabold uppercase truncate ${
               accent === "pink"
                 ? "text-[#dc5075] dark:text-[#f26ba8]"
                 : "text-emerald-600 dark:text-emerald-400"
@@ -110,12 +112,12 @@ export function MobileGuncelRowCard({
           </span>
         </div>
 
-        <h4 className="text-xs font-bold text-neutral-900 dark:text-white truncate">
+        <h4 className="text-[11px] font-bold text-neutral-900 dark:text-white leading-snug line-clamp-1">
           {item.title}
         </h4>
 
-        <div className="text-[10px] text-neutral-500 dark:text-neutral-400 truncate">
-          📍 {item.city} / {item.district} • {item.gender} • {item.ageText}
+        <div className="text-[9px] text-neutral-500 dark:text-neutral-400 truncate">
+          📍 {item.city}/{item.district} • {item.gender} • {item.ageText}
         </div>
       </div>
     </Link>
@@ -123,7 +125,7 @@ export function MobileGuncelRowCard({
 }
 
 /**
- * 3. SIFIRDAN MOBİL DETAYLI İLAN KARTI (Köpek İlanları Sayfası İçin)
+ * 3. MOBİL İLAN KARTI (Köpek İlanları Sayfası İçin - Tamamı Tıklanabilir, Zarif)
  */
 export function MobilePetCard({ item }: { item: PetListing }) {
   const petImage =
@@ -132,11 +134,11 @@ export function MobilePetCard({ item }: { item: PetListing }) {
     "/images/breeds/poodle-toy.png";
 
   return (
-    <div className="flex flex-col bg-white dark:bg-[#1E1C1A] rounded-xl border border-[#EDE7DE] dark:border-neutral-800 overflow-hidden shadow-2xs">
-      <Link
-        href={`/listing-stay-detail?id=${item.id}` as Route}
-        className="relative aspect-[4/3] w-full bg-neutral-100 dark:bg-neutral-900 overflow-hidden block"
-      >
+    <Link
+      href={`/listing-stay-detail?id=${item.id}` as Route}
+      className="flex flex-col bg-white dark:bg-[#1E1C1A] rounded-xl border border-[#EDE7DE] dark:border-neutral-800 overflow-hidden shadow-2xs active:scale-[0.98] transition-transform"
+    >
+      <div className="relative aspect-[4/3] w-full bg-neutral-100 dark:bg-neutral-900 overflow-hidden">
         <img
           src={petImage}
           alt={item.title}
@@ -144,56 +146,48 @@ export function MobilePetCard({ item }: { item: PetListing }) {
           loading="lazy"
         />
         <span
-          className={`absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md text-[9px] font-extrabold text-white shadow-xs ${
+          className={`absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[8px] font-extrabold text-white shadow-2xs ${
             item.featured ? "bg-[#dc5075]" : "bg-emerald-600"
           }`}
         >
           {item.featured ? "✨ Vitrin" : "✓ Doğrulanmış"}
         </span>
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent px-2 py-1.5 pt-4">
-          <span className="block text-[10px] font-bold text-white truncate">
+        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-2 py-1 pt-3">
+          <span className="block text-[9px] font-semibold text-white/95 truncate">
             📍 {item.location?.city} / {item.location?.district}
           </span>
         </div>
-      </Link>
+      </div>
 
-      <div className="p-2.5 flex flex-col gap-1 flex-1 justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-1.5 min-w-0">
+      <div className="p-2 flex flex-col justify-between flex-1 gap-1">
+        <div className="space-y-0.5">
+          <div className="flex items-center gap-1 min-w-0">
             <img
               src={`/images/breeds/${item.breedSlug || "poodle-toy"}.png`}
               alt={item.breed}
-              className="w-4 h-4 rounded-full object-cover ring-1 ring-[#dc5075] shrink-0"
+              className="w-3.5 h-3.5 rounded-full object-cover ring-1 ring-[#dc5075]/60 shrink-0"
             />
-            <span className="text-[10px] font-extrabold text-[#dc5075] truncate">
+            <span className="text-[9px] font-extrabold text-[#dc5075] uppercase tracking-tight truncate">
               {item.breed}
             </span>
           </div>
 
-          <Link href={`/listing-stay-detail?id=${item.id}` as Route} className="block">
-            <h3 className="text-xs font-bold text-neutral-900 dark:text-white truncate">
-              {item.title}
-            </h3>
-          </Link>
-
-          <div className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 truncate">
-            {item.gender === "MALE" ? "Erkek ♂" : "Dişi ♀"} • {item.exactAgeText}
-          </div>
+          <h3 className="text-[11px] font-bold text-neutral-900 dark:text-white leading-snug line-clamp-2">
+            {item.title}
+          </h3>
         </div>
 
-        <Link
-          href={`/listing-stay-detail?id=${item.id}` as Route}
-          className="mt-1.5 py-1.5 rounded-lg bg-[#dc5075] text-white text-[10px] font-extrabold text-center block"
-        >
-          İlanı İncele →
-        </Link>
+        <div className="pt-1 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-[9px] font-medium text-neutral-500 dark:text-neutral-400">
+          <span>{item.gender === "MALE" ? "Erkek ♂" : "Dişi ♀"}</span>
+          <span>{item.exactAgeText}</span>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
 /**
- * 4. SIFIRDAN MOBİL KÖPEK CİNSİ KARTI (48 Irk Sayfası İçin)
+ * 4. MOBİL KÖPEK CİNSİ KARTI (48 Irk Sayfası İçin - Tamamı Tıklanabilir)
  */
 export function MobileBreedCard({ breed }: { breed: DogBreed }) {
   const getSizeLabel = (size: string) => {
@@ -218,9 +212,8 @@ export function MobileBreedCard({ breed }: { breed: DogBreed }) {
   return (
     <Link
       href={targetHref}
-      className="flex flex-col bg-white dark:bg-[#1E1C1A] rounded-xl border border-[#EDE7DE] dark:border-neutral-800 overflow-hidden shadow-2xs"
+      className="flex flex-col bg-white dark:bg-[#1E1C1A] rounded-xl border border-[#EDE7DE] dark:border-neutral-800 overflow-hidden shadow-2xs active:scale-[0.98] transition-transform"
     >
-      {/* Görsel Alanı: Tek Sol Üst Rozet + Tek Alt Başlık */}
       <div className="relative aspect-[4/3] w-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
         <img
           src={breed.featuredImage}
@@ -228,29 +221,23 @@ export function MobileBreedCard({ breed }: { breed: DogBreed }) {
           className="w-full h-full object-cover"
           loading="lazy"
         />
-        <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md text-[9px] font-bold bg-black/65 text-white backdrop-blur-xs">
+        <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[8px] font-bold bg-black/65 text-white backdrop-blur-xs">
           {getSizeLabel(breed.sizeCategory)}
         </span>
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent px-2.5 py-2 pt-5">
-          <h3 className="text-xs font-extrabold text-white truncate">
+        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent px-2 py-1.5 pt-4">
+          <h3 className="text-[11px] font-extrabold text-white leading-tight line-clamp-1">
             {breed.name}
           </h3>
         </div>
       </div>
 
-      {/* Alt Özellikler: Çakışmasız Tek Satırlı Bilgiler */}
-      <div className="p-2.5 flex flex-col gap-1 flex-1 justify-between">
-        <div className="space-y-1">
-          <div className="text-[10px] font-bold text-[#dc5075] truncate">
-            {breed.physical.originCountry} • {breed.physical.lifeExpectancy}
-          </div>
-          <div className="text-[10px] text-neutral-600 dark:text-neutral-300 font-medium truncate">
-            Apartman: {breed.ratings.apartmentSuitability}/5 • Eğitim: {breed.ratings.trainability}/5
-          </div>
+      <div className="p-2 flex flex-col justify-between flex-1 gap-1">
+        <div className="text-[9px] font-semibold text-[#dc5075] truncate">
+          {breed.physical.originCountry} • {breed.physical.lifeExpectancy}
         </div>
-
-        <div className="mt-1.5 py-1.5 rounded-lg bg-[#dc5075] text-white text-[10px] font-extrabold text-center">
-          🐾 İlanları Gör
+        <div className="pt-1 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-[9px] text-neutral-600 dark:text-neutral-300 font-medium">
+          <span>Apartman: {breed.ratings.apartmentSuitability}/5</span>
+          <span className="text-[#dc5075] font-bold">İlanlar →</span>
         </div>
       </div>
     </Link>

@@ -94,221 +94,38 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#FAF8F5] dark:bg-[#151312] text-[#1C1917] dark:text-[#E8E4DF] transition-colors pb-16 md:pb-12">
       {/* ===================================================================== */}
-      {/* 1. SIFIRDAN YAZILMIŞ MOBİL ANA SAYFA DENEYİMİ (< 768px)                */}
+      {/* 1. SADE VE DOĞRUDAN VİTRİN ODAKLI MOBİL ANA SAYFA (< 768px)            */}
       {/* ===================================================================== */}
-      <div className="block md:hidden px-3 pt-3 space-y-4">
-        {/* A) MOBİL HIZLI ARAMA & FİLTRE KARTI */}
-        <div className="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700 shadow-2xs space-y-2.5">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Irk, şehir veya ilan başlığı ara..."
-              className="w-full text-xs bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl pl-8 pr-8 py-2.5 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
-            />
-            <MagnifyingGlassIcon className="w-4 h-4 text-neutral-400 absolute left-2.5 top-2.5" />
-            {searchTerm && (
-              <button
-                type="button"
-                onClick={() => setSearchTerm("")}
-                className="absolute right-2.5 top-2.5 text-neutral-400"
-              >
-                <XMarkIcon className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <select
-              value={selectedBreed}
-              onChange={(e) => setSelectedBreed(e.target.value)}
-              className="w-full text-xs font-semibold bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
-            >
-              <option value="TÜMÜ">Tüm Cinsler (48)</option>
-              {ALL_BREEDS.map((b) => (
-                <option key={b.slug} value={b.name}>
-                  {b.name} ({b.count})
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              className="w-full text-xs font-semibold bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#dc5075]"
-            >
-              <option value="TÜMÜ">Tüm Şehirler (81)</option>
-              {CITIES_LIST.map((c) => (
-                <option key={c.slug} value={c.name}>
-                  {c.name} ({c.count})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {(selectedBreed !== "TÜMÜ" || selectedCity !== "TÜMÜ" || searchTerm) && (
-            <div className="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-700 text-[11px]">
-              <span className="font-semibold text-neutral-600 dark:text-neutral-300 truncate pr-2">
-                Filtre: {selectedBreed !== "TÜMÜ" ? selectedBreed : "Tüm Irklar"}{" "}
-                {selectedCity !== "TÜMÜ" ? `• ${selectedCity}` : ""}
-              </span>
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="text-rose-600 font-extrabold shrink-0"
-              >
-                Temizle ✕
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* B) MOBİL 48 KÖPEK CİNSİ & 81 ŞEHİR LİSTESİ (Tam Genişlikli Tek Sütun - Çakışmasız) */}
-        <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-2xs">
-          <div className="grid grid-cols-2 text-xs font-extrabold border-b border-neutral-200 dark:border-neutral-700">
-            <button
-              type="button"
-              onClick={() => {
-                setSidebarTab(1);
-                setSidebarSearch("");
-              }}
-              className={`py-2.5 text-center transition-colors ${
-                sidebarTab === 1
-                  ? "bg-[#dc5075] text-white"
-                  : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300"
-              }`}
-            >
-              🐕 Köpek Cinsleri (48)
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setSidebarTab(2);
-                setSidebarSearch("");
-              }}
-              className={`py-2.5 text-center transition-colors ${
-                sidebarTab === 2
-                  ? "bg-[#802859] text-white"
-                  : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300"
-              }`}
-            >
-              📍 Şehirler (81)
-            </button>
-          </div>
-
-          <div className="p-2 border-b border-neutral-100 dark:border-neutral-700/60 bg-neutral-50 dark:bg-neutral-900/50">
-            <div className="relative">
-              <input
-                type="text"
-                value={sidebarSearch}
-                onChange={(e) => setSidebarSearch(e.target.value)}
-                placeholder={
-                  sidebarTab === 1 ? "48 köpek ırkı içinde ara..." : "81 şehir içinde ara..."
-                }
-                className="w-full text-xs bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg pl-7 pr-6 py-1.5 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-[#dc5075]"
-              />
-              <MagnifyingGlassIcon className="w-3.5 h-3.5 text-neutral-400 absolute left-2 top-2" />
-              {sidebarSearch && (
-                <button
-                  type="button"
-                  onClick={() => setSidebarSearch("")}
-                  className="absolute right-2 top-2 text-neutral-400"
-                >
-                  <XMarkIcon className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-          </div>
-
-          <ul className="max-h-[195px] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-700/50 text-xs">
-            {sidebarTab === 1
-              ? filteredBreeds.map((breed) => {
-                  const active = selectedBreed === breed.name;
-                  return (
-                    <li key={breed.slug}>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setSelectedBreed(active ? "TÜMÜ" : breed.name)
-                        }
-                        className={`w-full px-3 py-2 flex items-center justify-between gap-2 text-left transition-colors ${
-                          active
-                            ? "bg-[#dc5075]/10 text-[#dc5075] font-bold"
-                            : "text-neutral-800 dark:text-neutral-200"
-                        }`}
-                      >
-                        <span className="flex items-center gap-2.5 min-w-0">
-                          <img
-                            src={`/images/breeds/${breed.slug}.png`}
-                            alt={breed.name}
-                            className="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-[#dc5075]/40"
-                            loading="lazy"
-                          />
-                          <span className="truncate font-semibold">{breed.name}</span>
-                        </span>
-                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 shrink-0">
-                          {breed.count} İlan
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })
-              : filteredCities.map((city) => {
-                  const active = selectedCity === city.name;
-                  return (
-                    <li key={city.slug}>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setSelectedCity(active ? "TÜMÜ" : city.name)
-                        }
-                        className={`w-full px-3 py-2 flex items-center justify-between gap-2 text-left transition-colors ${
-                          active
-                            ? "bg-[#802859]/10 text-[#802859] dark:text-[#f26ba8] font-bold"
-                            : "text-neutral-800 dark:text-neutral-200"
-                        }`}
-                      >
-                        <span className="truncate font-semibold">📍 {city.name}</span>
-                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 shrink-0">
-                          {city.count} İlan
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-          </ul>
-        </div>
-
-        {/* C) MOBİL ÖNE ÇIKAN ÜRETİCİLER & KULÜPLER (Yatay Kaydırmalı Hikaye Şeridi) */}
-        <div className="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700 shadow-2xs">
-          <div className="flex items-center justify-between mb-2.5">
-            <span className="text-xs font-extrabold text-[#dc5075]">
+      <div className="block md:hidden px-2.5 pt-2.5 space-y-3">
+        {/* A) KOMPAKT HİKAYE TARZI ÖNE ÇIKAN ÜRETİCİLER & KULÜPLER HALKALARI */}
+        <div className="bg-white dark:bg-neutral-800 rounded-xl px-2.5 py-2 border border-neutral-200/80 dark:border-neutral-700/80 shadow-2xs">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[11px] font-extrabold text-[#dc5075]">
               🏆 Öne Çıkan Üreticiler & Kulüpler
             </span>
             <Link
               href={"/uyeler" as Route}
-              className="text-[11px] font-bold text-neutral-500 dark:text-neutral-400"
+              className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400"
             >
               Tümü →
             </Link>
           </div>
-          <div className="flex items-center gap-3 overflow-x-auto pb-1">
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-0.5">
             {FEATURED_BREEDERS.map((breeder) => (
               <Link
                 key={breeder.id}
                 href={"/uyeler" as Route}
-                className="flex flex-col items-center shrink-0 w-16 text-center"
+                className="flex flex-col items-center shrink-0 w-14 text-center"
               >
-                <div className="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-[#dc5075] to-amber-500">
+                <div className="w-11 h-11 rounded-full p-0.5 bg-gradient-to-tr from-[#dc5075] to-amber-500">
                   <img
                     src={breeder.image}
                     alt={breeder.name}
-                    className="w-full h-full rounded-full object-cover border-2 border-white dark:border-neutral-900"
+                    className="w-full h-full rounded-full object-cover border border-white dark:border-neutral-900"
                     loading="lazy"
                   />
                 </div>
-                <span className="mt-1 text-[10px] font-bold text-neutral-800 dark:text-neutral-200 truncate w-full">
+                <span className="mt-0.5 text-[9px] font-semibold text-neutral-700 dark:text-neutral-300 truncate w-full">
                   {breeder.name}
                 </span>
               </Link>
@@ -316,41 +133,26 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* D) MOBİL VİTRİN İLANLARI (2 Sütunlu Sıfırdan Mobil Kartlar) */}
-        <div className="space-y-2.5">
+        {/* B) DOĞRUDAN VİTRİN İLANLARI (2 Sütunlu Optimize Mobil Kartlar) */}
+        <div className="space-y-2">
           <div className="flex items-center justify-between px-0.5">
-            <h2 className="text-sm font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">
+            <h2 className="text-sm font-extrabold text-neutral-900 dark:text-white flex items-center gap-1">
               <SparklesIcon className="w-4 h-4 text-[#dc5075]" />
-              <span>Vitrin İlanları ({filteredVitrin.length})</span>
+              <span>Vitrin İlanları ({VITRIN_LISTINGS.length})</span>
             </h2>
             <Link
               href={"/listing-stay" as Route}
-              className="text-xs font-extrabold text-[#dc5075]"
+              className="text-[11px] font-extrabold text-[#dc5075]"
             >
-              Tümünü Gör →
+              Tüm İlanlar →
             </Link>
           </div>
 
-          {filteredVitrin.length > 0 ? (
-            <div className="grid grid-cols-2 gap-2.5">
-              {filteredVitrin.map((item) => (
-                <MobileVitrinCard key={item.id} item={item} />
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 text-center border border-neutral-200 dark:border-neutral-700 space-y-2">
-              <p className="text-xs text-neutral-500">
-                Aradığınız filtreye uygun vitrin ilanı bulunamadı.
-              </p>
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="px-4 py-1.5 rounded-lg bg-[#dc5075] text-white text-xs font-bold"
-              >
-                Tüm İlanları Göster
-              </button>
-            </div>
-          )}
+          <div className="grid grid-cols-2 gap-2">
+            {VITRIN_LISTINGS.map((item) => (
+              <MobileVitrinCard key={item.id} item={item} />
+            ))}
+          </div>
         </div>
 
         {/* E) MOBİL YENİ EKLENEN & GÜNÜN VİTRİN İLANLARI (Sekmeli Yatay Kartlar) */}
